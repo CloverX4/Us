@@ -19,13 +19,13 @@ const tiles = [
     img: 'https://picsum.photos/seed/til-knoww/600/400',
     area: 'til',
     fade: 1,
-    bleedOrigin: '100% 0%',    // top-right corner
+    bleedOrigin: '100% 100%',  // bottom-right corner
   },
   {
     title: 'Product',
     peek: "teardowns and product thoughts",
     href: `${base}product/`,
-    color: '#FFB347',
+    color: '#1A1A2E',
     img: 'https://picsum.photos/seed/product-knoww/600/400',
     area: 'product',
     fade: 0,
@@ -38,17 +38,16 @@ const tiles = [
     img: 'https://picsum.photos/seed/builds-knoww/700/400',
     area: 'builds',
     fade: 1,
-    bleedOrigin: '100% 50%',   // right center
   },
   {
     title: 'Personal',
     peek: "anime, hobbies, vibes",
     href: `${base}personal/`,
-    color: '#1A1A2E',
-    img: 'https://picsum.photos/seed/personal-knoww/600/500',
+    color: '#FFB347',
+    img: 'https://picsum.photos/seed/personal-vibes/600/500',
     area: 'personal',
     fade: 1,
-    bleedOrigin: '100% 100%',  // bottom-right corner
+    bleedOrigin: '100% 0%',    // top-right corner
   },
   {
     title: "Let's Talk",
@@ -80,20 +79,20 @@ const bleedSet = new Set(['til', 'builds', 'personal']);
   <!-- Desktop: grid left, heading right -->
   <div class="hidden lg:flex w-full h-screen items-center">
 
-    <!-- LEFT: tile grid -->
+    <!-- LEFT: tile grid (extends under heading for bleed tiles) -->
     <div
       class="tile-grid relative z-10"
       style="
-        width: 58%;
+        width: 72%;
         height: 80vh;
         padding: 4vh 0 4vh 5%;
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1.1fr 0.7fr 0.6fr;
         grid-template-rows: 1fr 1fr 1fr;
         grid-template-areas:
-          'about   til      til'
-          'about   product  builds'
-          'talk    personal personal';
+          'about   til      til      til'
+          'about   product  builds   .'
+          'talk    personal personal personal';
         gap: 10px;
       "
     >
@@ -115,14 +114,20 @@ const bleedSet = new Set(['til', 'builds', 'personal']);
               src={tile.img}
               alt={tile.title}
               class="tile-img absolute inset-0 w-full h-full object-cover"
-              style={bleeds ? '-webkit-mask-image: linear-gradient(to right, black 50%, transparent 95%); mask-image: linear-gradient(to right, black 50%, transparent 95%);' : ''}
+              style={bleeds
+                ? tile.bleedOrigin
+                  ? `-webkit-mask-image: radial-gradient(ellipse 55% 280% at ${tile.bleedOrigin}, transparent 15%, rgba(0,0,0,0.15) 30%, rgba(0,0,0,0.4) 48%, rgba(0,0,0,0.7) 62%, black 78%); mask-image: radial-gradient(ellipse 55% 280% at ${tile.bleedOrigin}, transparent 15%, rgba(0,0,0,0.15) 30%, rgba(0,0,0,0.4) 48%, rgba(0,0,0,0.7) 62%, black 78%);`
+                  : '-webkit-mask-image: linear-gradient(to right, black 50%, transparent 95%); mask-image: linear-gradient(to right, black 50%, transparent 95%);'
+                : ''}
               loading="lazy"
             />
 
             <div
               class="tile-color absolute inset-0"
               style={bleeds
-                ? `background: linear-gradient(to right, ${tile.color} 50%, transparent 100%);`
+                ? tile.bleedOrigin
+                  ? `background: radial-gradient(ellipse 55% 280% at ${tile.bleedOrigin}, transparent 15%, ${tile.color}26 30%, ${tile.color}66 48%, ${tile.color}B3 62%, ${tile.color} 78%);`
+                  : `background: linear-gradient(to right, ${tile.color} 50%, transparent 100%);`
                 : `background: ${tile.color};`}
             ></div>
 
@@ -139,7 +144,11 @@ const bleedSet = new Set(['til', 'builds', 'personal']);
 
             <div
               class="tile-info absolute bottom-0 left-0 right-0 px-4 py-4 translate-y-full"
-              style={`background: linear-gradient(to top, rgba(0,0,0,0.88), rgba(0,0,0,0.45) 75%, transparent); ${bleeds ? '-webkit-mask-image: linear-gradient(to right, black 50%, transparent 95%); mask-image: linear-gradient(to right, black 50%, transparent 95%);' : ''}`}
+              style={`background: linear-gradient(to top, rgba(0,0,0,0.88), rgba(0,0,0,0.45) 75%, transparent); ${bleeds
+                ? tile.bleedOrigin
+                  ? `-webkit-mask-image: radial-gradient(ellipse 55% 280% at ${tile.bleedOrigin}, transparent 15%, rgba(0,0,0,0.15) 30%, rgba(0,0,0,0.4) 48%, rgba(0,0,0,0.7) 62%, black 78%); mask-image: radial-gradient(ellipse 55% 280% at ${tile.bleedOrigin}, transparent 15%, rgba(0,0,0,0.15) 30%, rgba(0,0,0,0.4) 48%, rgba(0,0,0,0.7) 62%, black 78%);`
+                  : '-webkit-mask-image: linear-gradient(to right, black 50%, transparent 95%); mask-image: linear-gradient(to right, black 50%, transparent 95%);'
+                : ''}`}
             >
               <p class="text-sm font-bold text-white leading-tight" style="font-family: var(--font-display);">
                 {tile.title}
@@ -153,10 +162,10 @@ const bleedSet = new Set(['til', 'builds', 'personal']);
       })}
     </div>
 
-    <!-- RIGHT: heading -->
+    <!-- RIGHT: heading (overlaps bleeding tiles) -->
     <div
-      class="relative z-20 flex flex-col justify-center items-start"
-      style="width: 42%; padding: 0 6% 0 4%;"
+      class="absolute z-20 flex flex-col justify-center items-start"
+      style="top: 0; bottom: 0; right: 0; width: 40%; padding: 4% 5% 0 3%;"
     >
       <h1
         id="hero-heading"
@@ -174,7 +183,7 @@ const bleedSet = new Set(['til', 'builds', 'personal']);
       <p
         id="hero-subtitle"
         class="text-sm tracking-wide"
-        style="color: color-mix(in srgb, var(--color-navy) 45%, transparent); font-family: var(--font-body); opacity: 0;"
+        style="color: color-mix(in srgb, var(--color-navy) 70%, transparent); font-family: var(--font-body); opacity: 0;"
       >
         engineer. product thinker. anime lover.<br />professionally curious.
       </p>

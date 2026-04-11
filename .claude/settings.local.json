@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install:*)",
+      "Bash(python -c \"import litellm; import playwright; print\\(''all good''\\)\")",
+      "Bash(py -c \"import litellm; import playwright; print\\(''all good''\\)\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(r.get\\(''''message'''',''''''''\\)[:300]\\) for r in d.get\\(''''requests'''',[]\\)[:5]]\")",
+      "Bash(find /c/Users/Indira.Nandepu/AppData/Roaming/Code/User/workspaceStorage/ -name *.json)",
+      "Bash(find /c/Users/Indira.Nandepu/AppData/Roaming/Code/User/workspaceStorage/74a1c817e0fa52a017414eabf93343c6/ -name *.json -type f)",
+      "Bash(find /c/Users/Indira.Nandepu/AppData/Roaming/Code/User/workspaceStorage/7b9777620547df8ad226ce82be01094d/ -name *.json -type f)",
+      "Bash(find /c/Users/Indira.Nandepu/AppData/Roaming/Code/User/workspaceStorage/af667f9664c3045b3577a2cdf01accfa/ -name *.json -type f)",
+      "Bash(find /c/Users/Indira.Nandepu/AppData/Roaming/Code/User/workspaceStorage/af6f37a04af9e0d5ced970a7c1a854aa/ -name *.json -type f)",
+      "Bash(find /c/Users/Indira.Nandepu/AppData/Roaming/Code/User/workspaceStorage/c03e0bba7504f2c5f0a4241ebb8aa353/ -name *.json -type f)",
+      "Bash(find /c/Users/Indira.Nandepu/AppData/Roaming/Code/User/workspaceStorage/dcd6b8e8998ec9c7e1af05056537b1b8/ -name *.json -type f)",
+      "Bash(find /c/Users/Indira.Nandepu/AppData/Roaming/Code/User/workspaceStorage/e8dabd49457398f069f893305fbd1d98/ -name *.json -type f)",
+      "Bash(find /c/Users/Indira.Nandepu/AppData/Roaming/Code/User/globalStorage/emptyWindowChatSessions/ -name *.json -type f)",
+      "Bash(find /c/Users/Indira.Nandepu/AppData/Roaming/Code/User/workspaceStorage -name *.json -path *chatSessions*)",
+      "Bash(grep -r \"\"text\"\": /c/Users/Indira.Nandepu/AppData/Roaming/Code/User/workspaceStorage/*/chatSessions/*.json)",
+      "Bash(for f:*)",
+      "Bash(do)",
+      "Bash(echo \"=== $f ===\")",
+      "Bash(python3 -c \":*)",
+      "Bash(done)",
+      "Bash(git config:*)",
+      "Bash(ssh-keygen:*)",
+      "Bash(powershell:*)",
+      "Bash(ssh -T git@github.com)",
+      "Bash(ssh -T git@github-personal)",
+      "Bash(git init:*)",
+      "Bash(gh auth:*)",
+      "Bash(git remote:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

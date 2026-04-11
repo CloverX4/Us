@@ -1,0 +1,143 @@
+{
+  "personal": {
+    "name": "Indira Nandepu",
+    "email": "inandepu@gmail.com",
+    "location": "Hyderabad, Telangana",
+    "linkedin": "https://www.linkedin.com/in/indira-nandepu/"
+  },
+
+  "target_roles": [
+    {
+      "title": "Product Manager",
+      "priority": 1,
+      "seniority_levels": ["APM", "PM", "Senior PM", "Product Manager", "Associate PM"],
+      "why": "I've always been the person in the room asking 'but why does the user need this?' and 'what are we really solving?' The PM role is where my technical instincts and my love for ideation and collaboration actually intersect. I've been doing PM work as an SDE — just without the title."
+    },
+    {
+      "title": "Senior Software Engineer",
+      "priority": 2,
+      "seniority_levels": ["Senior SDE", "SDE II", "Senior Engineer", "Software Engineer II"],
+      "why": "I have strong full-stack and AI engineering experience. If I'm in an SDE role, I want it to be one where I'm close to product decisions and user impact — not just translating requirements into code."
+    }
+  ],
+
+  "career_narrative": "I started as a software engineer in enterprise analytics, building backend systems, AI reporting pipelines, and running large-scale migrations. But what I realized along the way was that the moments I was most energized weren't when I was writing code — they were when I was questioning requirements, designing flows, pushing back on what didn't serve users, and collaborating cross-team to ship something that actually mattered. I've led migrations that saved $2M+, built AI tools that reduced workflows from 8 clicks to 2, and consistently been recognized as a change agent at my company. Now I want to own the 'why' behind what gets built — and that means product management.",
+
+  "key_achievements": [
+    {
+      "title": "DAX to SQL Migration — $2M+ Cost Reduction",
+      "description": "Led the migration of Power BI's DAX-based reporting to SQL on Azure Databricks Delta Tables. Wrote complex CTEs, running totals, cumulative sums, and conditional column logic. Built a centralized migration and onboarding repo (50+ scripts) that is now the base for all production onboarding. Migrated 180+ customers on UAT. Estimated $2M+ annual savings from BI subscription reduction.",
+      "impact": "$2M+ annual cost reduction, 180+ domains, 50+ reusable scripts",
+      "skills": ["SQL", "Azure Databricks", "Delta Tables", "Python", "automation"]
+    },
+    {
+      "title": "AI-Driven Reporting System (RAG + FastAPI)",
+      "description": "Built an AI reporting pipeline using RAG with FastAPI, OpenAI, and VectorDB. Supported 24+ visualization types and 20+ data transformation operations. Reduced consultant workflows from 8+ clicks to 2 per operation for report search, generation, and email triggers. Delivered multiple prototypes under tight deadlines for ad-hoc client demos.",
+      "impact": "8+ to 2 clicks per workflow, 24+ viz types, 20+ data ops",
+      "skills": ["FastAPI", "OpenAI", "RAG", "ChromaDB", "Qdrant", "Python"]
+    },
+    {
+      "title": "Enterprise Incident Resolution",
+      "description": "Resolved 70+ production incidents for 20+ enterprise clients within 3 months, while simultaneously fixing 20+ UI bugs from UX reviews.",
+      "impact": "70+ incidents, 20+ enterprise clients, 3 months",
+      "skills": ["debugging", "client impact", "cross-team coordination"]
+    },
+    {
+      "title": "Graphical Password Authenticator — Techathon 2nd Place",
+      "description": "Built and published a React-based graphical password authenticator as an NPM package. Won 2nd place in internal company Techathon.",
+      "impact": "2nd place, published NPM package",
+      "skills": ["ReactJS", "NodeJS", "Firebase", "product thinking"]
+    },
+    {
+      "title": "GEP Pulse — In-House Radio Initiative",
+      "description": "Initiated and launched GEP Pulse, an in-house radio channel for music and office news, as part of the GEP Funcoholics community.",
+      "impact": "Community initiative, culture building",
+      "skills": ["initiative", "community building", "leadership"]
+    }
+  ],
+
+  "recognitions": [
+    "Change Agents Q1&Q2 2025 — DBSQL solution and client onboarding contributions",
+    "Catalyst Q3 2024 — AI deliverables for urgent demos, high-impact results",
+    "SPOT Recognition Oct 2024 — UI version upgrades, proactive coordination",
+    "Change Agents Q2 2024 — AI scope adaptation, SLA compliance, client impact"
+  ],
+
+  "personality": {
+    "communication_style": "conversational-storyteller",
+    "tone": "warm, direct, specific — not corporate or stiff",
+    "traits": [
+      "leads with context before conclusion",
+      "thinks in systems and flows",
+      "authenticity-first — deeply values personal touch",
+      "initiator — starts things, not just executes them",
+      "boundary-aware — firm on work-life balance without apology",
+      "collaborative — naturally says 'we', thinks in teams",
+      "curious about user experience and product decisions"
+    ],
+    "values": [
+      "ownership over execution",
+      "user feedback loops and experimentation",
+      "collaboration and ideation",
+      "psychological safety from management",
+      "work-life balance (non-negotiable)",
+      "ships things that matter to real users"
+    ],
+    "red_flags_in_companies": [
+      "glorifying overwork or expecting beyond-hours commitment as default",
+      "pure maintenance/support roles with no product influence",
+      "heavy internal politics / top-down decision making",
+      "no user feedback loops or experimentation culture"
+    ]
+  },
+
+  "voice_guide": {
+    "cover_letter_structure": [
+      "Open with a specific observation about the company/product/problem — not 'I am writing to apply'",
+      "Connect their challenge or mission to something you've genuinely thought about",
+      "One concrete story — a specific moment where you showed the relevant skill with real numbers",
+      "Why this role, this company, this moment in time — make it specific",
+      "Close with genuine curiosity, not 'I look forward to hearing from you'"
+    ],
+    "recruiter_reply_structure": [
+      "Acknowledge the opportunity specifically — show you read it",
+      "Quick, confident positioning — who you are and what you bring",
+      "One relevant hook that makes you memorable",
+      "Clear next step ask"
+    ],
+    "language_rules": [
+      "Use 'I' confidently — no excessive hedging or softening",
+      "Contractions are fine — 'I've', 'I'm', 'it's'",
+      "Specific > general at all times — name the technology, the metric, the decision",
+      "No buzzword soup — no 'synergy', 'leverage', 'passionate about innovation'",
+      "If you use a claim, back it with a number or a story",
+      "End on energy, not formality"
+    ],
+    "what_makes_her_different": [
+      "She has shipped AI features (RAG, FastAPI, OpenAI) before it was mainstream at most Indian enterprises",
+      "She thinks in user flows and experience, not just code",
+      "She has the rare combination of deep backend/data eng + AI + product instincts",
+      "She initiates things — Pulse, shared repos, cross-team alignment — without being asked",
+      "She has operated with enterprise-scale responsibility early in career (NIT + GEP enterprise clients)"
+    ]
+  },
+
+  "skills": {
+    "languages": ["Python", "C#", "SQL", "TypeScript", "C++", "Java"],
+    "frameworks": ["FastAPI", "Angular", ".NET", "Cypress"],
+    "ai_ml": ["RAG", "OpenAI API", "ChromaDB", "Qdrant", "LangChain-adjacent"],
+    "cloud_data": ["Azure Databricks", "Delta Tables", "PySpark", "PyDeequ", "MongoDB"],
+    "tools": ["GitHub", "Jira", "Postman", "New Relic", "Elasticsearch", "SonarCloud"],
+    "other": ["Hyperledger Fabric", "IPFS", "ReactJS", "NodeJS", "Firebase"]
+  },
+
+  "education": {
+    "degree": "B.Tech Computer Science & Engineering",
+    "institution": "National Institute of Technology, Warangal",
+    "period": "Sep 2019 – May 2023"
+  },
+
+  "certifications": [
+    "Blockchain Specialization — University at Buffalo & SUNY (Coursera, Jan 2023)"
+  ]
+}

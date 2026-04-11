@@ -1,0 +1,29 @@
+# Core
+anthropic>=0.40.0          # Claude SDK (still needed if using Anthropic provider)
+litellm>=1.50.0            # Unified interface to all LLM providers
+fastapi>=0.115.0            # API layer (you already know this)
+uvicorn>=0.32.0             # ASGI server for FastAPI
+pydantic>=2.0.0             # Data validation
+pydantic-settings>=2.0.0    # Settings management via .env
+
+# Database
+sqlmodel>=0.0.21            # SQLModel = SQLAlchemy + Pydantic (clean ORM)
+
+# Browser automation (for LinkedIn, Naukri, Wellfound — no public APIs)
+playwright>=1.49.0
+
+# HTTP client
+httpx>=0.28.0               # Async HTTP for APIs that do exist
+
+# Document processing
+PyPDF2>=3.0.0               # Parse uploaded PDF resumes
+python-docx>=1.1.0          # Generate/edit .docx resumes
+reportlab>=4.2.0            # Generate PDFs
+
+# MCP server
+mcp>=1.0.0                  # Anthropic MCP Python SDK
+
+# Utilities
+python-dotenv>=1.0.0
+rich>=13.0.0                # Pretty terminal output for debugging
+tenacity>=9.0.0             # Retry logic for flaky browser automation

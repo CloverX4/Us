@@ -1,0 +1,43 @@
+---
+import SectionLayout from '../../layouts/SectionLayout.astro';
+import SectionHeading from '../../components/shared/SectionHeading.astro';
+import Card from '../../components/shared/Card.astro';
+import { getCollection } from 'astro:content';
+
+const base = import.meta.env.BASE_URL;
+const posts = (await getCollection('til'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<SectionLayout title="TIL" description="today i learned // things that made me go waaaww">
+  <SectionHeading
+    label="til"
+    title="today i learned!!"
+    subtitle="random things that made me go 'waaaww'"
+    labelColor="var(--color-teal)"
+  />
+
+  {posts.length === 0 ? (
+    <div class="mt-8 rounded-2xl p-8 text-center" style="background: color-mix(in srgb, var(--color-teal) 8%, transparent);">
+      <p class="text-4xl mb-3">🧠</p>
+      <p class="text-sm" style="color: color-mix(in srgb, var(--color-navy) 50%, transparent);">
+        posts coming soooon!! stay tuned hehe
+      </p>
+    </div>
+  ) : (
+    <div class="mt-8 space-y-4">
+      {posts.map((post) => (
+        <Card
+          title={post.data.title}
+          description={post.data.description}
+          href={`${base}til/${post.id}/`}
+          date={post.data.pubDate}
+          tags={post.data.tags}
+          emoji={post.data.emoji}
+          accentColor="var(--color-teal)"
+        />
+      ))}
+    </div>
+  )}
+</SectionLayout>

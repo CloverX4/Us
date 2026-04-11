@@ -1,0 +1,179 @@
+---
+import PaletteTile from './PaletteTile.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const tiles = [
+  {
+    title: 'About',
+    subtitle: 'the whole story',
+    href: `${base}about/`,
+    color: 'var(--color-coral)',
+    gradientDir: 'to bottom right',
+    icon: '✨',
+    peek: "engineer turned product curious. here's how that happened",
+    gridArea: 'about',
+  },
+  {
+    title: 'TIL',
+    subtitle: 'today i learned',
+    href: `${base}til/`,
+    color: 'var(--color-teal)',
+    gradientDir: 'to top right',
+    icon: '🧠',
+    peek: 'random things that made me go waaaww',
+    gridArea: 'til',
+  },
+  {
+    title: 'Product',
+    subtitle: 'thinking out loud',
+    href: `${base}product/`,
+    color: 'var(--color-amber)',
+    gradientDir: 'to bottom left',
+    icon: '💡',
+    peek: 'case studies & teardowns & random product thoughts',
+    gridArea: 'product',
+  },
+  {
+    title: 'Builds',
+    subtitle: 'things i shipped',
+    href: `${base}builds/`,
+    color: 'var(--color-navy)',
+    gradientDir: 'to right',
+    icon: '🔧',
+    peek: 'Floww & more, the stuff i actually built',
+    gridArea: 'builds',
+  },
+  {
+    title: 'Personal',
+    subtitle: 'the human side',
+    href: `${base}personal/`,
+    color: 'var(--color-peach)',
+    gradientDir: 'to top',
+    icon: '⭐',
+    peek: 'anime, hobbies, vibes, the non-resume stuff',
+    gridArea: 'personal',
+  },
+  {
+    title: "Let's Talk",
+    subtitle: 'say hi!!',
+    href: `${base}lets-talk/`,
+    color: 'var(--color-coral)',
+    gradientDir: 'to bottom right',
+    icon: '👋',
+    peek: 'inandepu@gmail.com // always up for a good convo',
+    gridArea: 'talk',
+  },
+];
+---
+
+<section class="relative px-4 py-16 sm:px-6 lg:px-12">
+  <div id="palette-grid" class="mx-auto max-w-6xl">
+    <!-- Desktop: Asymmetric grid -->
+    <div
+      class="hidden gap-4 lg:grid"
+      style="grid-template-columns: repeat(12, 1fr); grid-template-rows: auto auto auto; grid-template-areas:
+        'about about about about about til til til til personal personal personal'
+        'about about about about about product product product product personal personal personal'
+        'builds builds builds builds builds builds builds builds talk talk talk talk';
+        min-height: 600px;"
+    >
+      {tiles.map((tile) => <PaletteTile {...tile} />)}
+    </div>
+
+    <!-- Mobile: Stacked cards -->
+    <div class="flex flex-col gap-4 lg:hidden">
+      {tiles.map((tile, i) => (
+        <div class="palette-tile-mobile" style={`--delay: ${i * 0.1}s`}>
+          <PaletteTile {...tile} gridArea="auto" />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Desktop: stagger tiles in on scroll
+  const desktopTiles = document.querySelectorAll('#palette-grid .lg\\:grid .palette-tile');
+  if (desktopTiles.length) {
+    gsap.set(desktopTiles, { opacity: 0, y: 50, scale: 0.96 });
+
+    ScrollTrigger.batch(desktopTiles, {
+      onEnter: (batch) => {
+        gsap.to(batch, {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: 'power2.out',
+        });
+      },
+      start: 'top 85%',
+    });
+  }
+
+  // Mobile: alternate slide-in
+  const mobileTiles = document.querySelectorAll('.palette-tile-mobile');
+  if (mobileTiles.length) {
+    mobileTiles.forEach((tile, i) => {
+      gsap.set(tile, { opacity: 0, x: i % 2 === 0 ? -40 : 40 });
+
+      ScrollTrigger.create({
+        trigger: tile,
+        start: 'top 85%',
+        onEnter: () => {
+          gsap.to(tile, {
+            opacity: 1,
+            x: 0,
+            duration: 0.5,
+            ease: 'power2.out',
+          });
+        },
+      });
+    });
+  }
+
+  // Hover interactions (desktop)
+  if (window.matchMedia('(pointer: fine)').matches) {
+    document.querySelectorAll('.palette-tile').forEach((tile) => {
+      const peek = tile.querySelector('.peek');
+
+      tile.addEventListener('mouseenter', () => {
+        gsap.to(tile, {
+          scale: 1.03,
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+        if (peek) {
+          gsap.to(peek, {
+            y: 0,
+            opacity: 1,
+            duration: 0.3,
+            ease: 'power2.out',
+          });
+        }
+      });
+
+      tile.addEventListener('mouseleave', () => {
+        gsap.to(tile, {
+          scale: 1,
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+        if (peek) {
+          gsap.to(peek, {
+            y: '100%',
+            opacity: 0,
+            duration: 0.25,
+            ease: 'power2.in',
+          });
+        }
+      });
+    });
+  }
+</script>

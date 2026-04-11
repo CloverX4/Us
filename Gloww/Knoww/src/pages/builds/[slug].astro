@@ -1,0 +1,29 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+const base = import.meta.env.BASE_URL;
+
+export async function getStaticPaths() {
+  const builds = await getCollection('builds');
+  return builds.map((build) => ({
+    params: { slug: build.id },
+    props: { build },
+  }));
+}
+
+const { build } = Astro.props;
+const { Content } = await render(build);
+---
+
+<PostLayout
+  title={build.data.title}
+  description={build.data.description}
+  tags={build.data.techStack}
+  label={build.data.status}
+  labelColor="var(--color-teal)"
+  backHref={`${base}builds/`}
+  backLabel="all builds"
+>
+  <Content />
+</PostLayout>

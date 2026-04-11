@@ -1,0 +1,40 @@
+---
+title: "Floww"
+description: "automated job application pipeline that discovers jobs, optimizes resumes, and applies with my personal touch"
+techStack: ["Python", "FastAPI", "Claude API", "Playwright", "SQLite"]
+github: "https://github.com/CloverX4/Us"
+status: "wip"
+featured: true
+---
+
+## what is Floww??
+
+Floww is my automated job application system. it discovers jobs across LinkedIn, Wellfound, and YCombinator, then applies with ATS-optimized resumes and personalized cover letters, all while maintaining my voice.
+
+because applying to jobs manually is... a LOT.
+
+## why i built it
+
+i was spending hours every day on job applications. copy-pasting, tweaking resumes, writing cover letters that all sounded the same. it felt like the most automatable thing in the world, so i automated it.
+
+## how it works
+
+1. **Job Discovery**: agents crawl LinkedIn, Wellfound, YC for matching roles
+2. **ATS Optimization**: analyzes job descriptions, optimizes resume for 95%+ ATS score
+3. **Cover Letter Generation**: writes personalized letters in MY voice (not generic AI slop)
+4. **Auto Apply**: submits applications via browser automation
+5. **Recruiter Replies**: handles inbound messages with personality
+
+## tech stack
+
+- **Python + FastAPI** for the backend
+- **Claude API** for all the AI-powered agents
+- **Playwright** for browser automation (LinkedIn doesn't have a public API lol)
+- **SQLite** for tracking applications
+- **Pydantic** for everything structured
+
+## current status
+
+still building!! the foundation is solid. agents, connectors, ATS scorer are all working. next up: the full application pipeline.
+
+this is the project that made me realize i actually enjoy building end-to-end systems, not just features. ✨

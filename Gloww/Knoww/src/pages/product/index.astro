@@ -1,0 +1,43 @@
+---
+import SectionLayout from '../../layouts/SectionLayout.astro';
+import SectionHeading from '../../components/shared/SectionHeading.astro';
+import Card from '../../components/shared/Card.astro';
+import { getCollection } from 'astro:content';
+
+const base = import.meta.env.BASE_URL;
+const posts = (await getCollection('product'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<SectionLayout title="Product" description="product thinking, teardowns, case studies, and random thoughts">
+  <SectionHeading
+    label="product"
+    title="thinking out loud"
+    subtitle="case studies, teardowns, and product thoughts that keep me up at night"
+    labelColor="var(--color-amber)"
+  />
+
+  {posts.length === 0 ? (
+    <div class="mt-8 rounded-2xl p-8 text-center" style="background: color-mix(in srgb, var(--color-amber) 8%, transparent);">
+      <p class="text-4xl mb-3">💡</p>
+      <p class="text-sm" style="color: color-mix(in srgb, var(--color-navy) 50%, transparent);">
+        product thoughts incoming!! watch this space
+      </p>
+    </div>
+  ) : (
+    <div class="mt-8 space-y-4">
+      {posts.map((post) => (
+        <Card
+          title={post.data.title}
+          description={post.data.description}
+          href={`${base}product/${post.id}/`}
+          date={post.data.pubDate}
+          tags={post.data.tags}
+          emoji="💡"
+          accentColor="var(--color-amber)"
+        />
+      ))}
+    </div>
+  )}
+</SectionLayout>

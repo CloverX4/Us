@@ -1,0 +1,67 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import BackToGrid from '../components/nav/BackToGrid.astro';
+import PageTransition from '../components/shared/PageTransition.astro';
+import SectionHeading from '../components/shared/SectionHeading.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  pubDate?: Date;
+  tags?: string[];
+  label?: string;
+  labelColor?: string;
+  backHref?: string;
+  backLabel?: string;
+}
+
+const { title, description, pubDate, tags = [], label, labelColor, backHref, backLabel } = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+const formattedDate = pubDate
+  ? pubDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
+  : null;
+---
+
+<BaseLayout title={`${title} | Knoww ME`} description={description}>
+  <BackToGrid />
+  <PageTransition>
+    <article class="mx-auto max-w-3xl px-6 py-20 lg:py-28">
+      <SectionHeading {label} {title} labelColor={labelColor} />
+
+      {(formattedDate || tags.length > 0) && (
+        <div class="mb-10 flex flex-wrap items-center gap-3">
+          {formattedDate && (
+            <span class="text-sm" style="color: color-mix(in srgb, var(--color-navy) 40%, transparent);">
+              {formattedDate}
+            </span>
+          )}
+          {tags.map((tag) => (
+            <span
+              class="rounded-full px-2.5 py-0.5 text-xs"
+              style={`background: color-mix(in srgb, ${labelColor || 'var(--color-teal)'} 12%, transparent); color: ${labelColor || 'var(--color-teal)'};`}
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <div class="prose">
+        <slot />
+      </div>
+
+      {backHref && (
+        <div class="mt-16 pt-8" style="border-top: 1px solid color-mix(in srgb, var(--color-navy) 8%, transparent);">
+          <a
+            href={backHref}
+            class="text-sm transition-colors hover:text-[var(--color-coral)]"
+            style="color: color-mix(in srgb, var(--color-navy) 45%, transparent);"
+          >
+            ← back to {backLabel || 'all posts'}
+          </a>
+        </div>
+      )}
+    </article>
+  </PageTransition>
+</BaseLayout>

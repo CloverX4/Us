@@ -1,0 +1,60 @@
+---
+interface Props {
+  label?: string;
+  title: string;
+  subtitle?: string;
+  labelColor?: string;
+}
+
+const { label, title, subtitle, labelColor = 'var(--color-coral)' } = Astro.props;
+---
+
+<div class="section-heading mb-12">
+  {label && (
+    <span
+      class="section-label mb-3 inline-block rounded-full px-3 py-1 text-xs font-medium tracking-wider uppercase"
+      style={`background: color-mix(in srgb, ${labelColor} 15%, transparent); color: ${labelColor}; font-family: var(--font-body);`}
+    >
+      {label}
+    </span>
+  )}
+
+  <h1
+    class="section-title text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl"
+    style="font-family: var(--font-display); color: var(--color-navy);"
+  >
+    {title}
+  </h1>
+
+  {subtitle && (
+    <p
+      class="section-subtitle mt-3 text-lg"
+      style="color: color-mix(in srgb, var(--color-navy) 50%, transparent); font-family: var(--font-body);"
+    >
+      {subtitle}
+    </p>
+  )}
+</div>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('.section-heading').forEach((heading) => {
+    const label = heading.querySelector('.section-label');
+    const title = heading.querySelector('.section-title');
+    const subtitle = heading.querySelector('.section-subtitle');
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: heading,
+        start: 'top 80%',
+      },
+    });
+
+    if (label) tl.from(label, { x: -20, opacity: 0, duration: 0.4 });
+    if (title) tl.from(title, { y: 20, opacity: 0, duration: 0.5 }, '-=0.2');
+    if (subtitle) tl.from(subtitle, { opacity: 0, duration: 0.4 }, '-=0.2');
+  });
+</script>

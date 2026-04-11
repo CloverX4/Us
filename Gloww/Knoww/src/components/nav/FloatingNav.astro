@@ -1,0 +1,147 @@
+---
+const base = import.meta.env.BASE_URL;
+
+const links = [
+  { label: 'home', href: base, color: 'var(--color-coral)' },
+  { label: 'about', href: `${base}about/`, color: 'var(--color-coral)' },
+  { label: 'til', href: `${base}til/`, color: 'var(--color-teal)' },
+  { label: 'product', href: `${base}product/`, color: 'var(--color-amber)' },
+  { label: 'builds', href: `${base}builds/`, color: 'var(--color-teal)' },
+  { label: 'personal', href: `${base}personal/`, color: 'var(--color-peach)' },
+  { label: "let's talk", href: `${base}lets-talk/`, color: 'var(--color-amber)' },
+];
+---
+
+<nav
+  id="floating-nav"
+  class="fixed bottom-6 right-6 z-50 cursor-pointer"
+  aria-label="Site navigation"
+>
+  <!-- Collapsed dot -->
+  <div
+    id="nav-dot"
+    class="flex items-center justify-center rounded-full transition-all duration-300"
+    style="width: 44px; height: 44px; background: var(--color-navy); box-shadow: 0 4px 16px rgba(26,26,46,0.3);"
+  >
+    <div class="rounded-full animate-pulse-slow" style="width: 10px; height: 10px; background: var(--color-teal);"></div>
+  </div>
+
+  <!-- Expanded menu -->
+  <div
+    id="nav-menu"
+    class="absolute bottom-0 right-0 overflow-hidden rounded-2xl opacity-0 pointer-events-none transition-all duration-300"
+    style="width: 0; height: 0; background: rgba(26,26,46,0.92); backdrop-filter: blur(16px); box-shadow: 0 8px 32px rgba(26,26,46,0.4);"
+  >
+    <div class="p-4 space-y-1" id="nav-links">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 text-sm transition-all duration-200 hover:text-white hover:translate-x-1 opacity-0"
+          style="font-family: var(--font-body);"
+        >
+          <span class="rounded-full shrink-0" style={`width: 7px; height: 7px; background: ${link.color};`}></span>
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile overlay -->
+<div
+  id="nav-overlay"
+  class="fixed inset-0 z-40 bg-black/20 opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"
+></div>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const nav = document.getElementById('floating-nav')!;
+  const dot = document.getElementById('nav-dot')!;
+  const menu = document.getElementById('nav-menu')!;
+  const links = document.querySelectorAll('.nav-link');
+  const overlay = document.getElementById('nav-overlay')!;
+  let isOpen = false;
+  let scrollFadeTimeout: number;
+
+  function openNav() {
+    if (isOpen) return;
+    isOpen = true;
+    dot.style.opacity = '0';
+    dot.style.pointerEvents = 'none';
+    menu.style.pointerEvents = 'auto';
+
+    gsap.to(menu, {
+      width: 200,
+      height: 'auto',
+      opacity: 1,
+      duration: 0.3,
+      ease: 'power2.out',
+    });
+
+    gsap.to(links, {
+      opacity: 1,
+      x: 0,
+      stagger: 0.04,
+      duration: 0.2,
+      delay: 0.1,
+    });
+
+    // Mobile overlay
+    overlay.style.opacity = '1';
+    overlay.style.pointerEvents = 'auto';
+  }
+
+  function closeNav() {
+    if (!isOpen) return;
+    isOpen = false;
+
+    gsap.to(links, { opacity: 0, x: -10, duration: 0.15 });
+    gsap.to(menu, {
+      width: 0,
+      height: 0,
+      opacity: 0,
+      duration: 0.25,
+      delay: 0.1,
+      onComplete: () => {
+        dot.style.opacity = '1';
+        dot.style.pointerEvents = 'auto';
+        menu.style.pointerEvents = 'none';
+      },
+    });
+
+    overlay.style.opacity = '0';
+    overlay.style.pointerEvents = 'none';
+  }
+
+  // Set initial state for links
+  gsap.set(links, { opacity: 0, x: -10 });
+
+  // Desktop: hover
+  if (window.matchMedia('(pointer: fine)').matches) {
+    nav.addEventListener('mouseenter', openNav);
+    nav.addEventListener('mouseleave', closeNav);
+  }
+
+  // Mobile + desktop click fallback
+  dot.addEventListener('click', (e) => {
+    e.stopPropagation();
+    isOpen ? closeNav() : openNav();
+  });
+
+  overlay.addEventListener('click', closeNav);
+  document.addEventListener('click', (e) => {
+    if (isOpen && !nav.contains(e.target as Node)) closeNav();
+  });
+
+  // Fade on scroll
+  window.addEventListener('scroll', () => {
+    if (!isOpen) {
+      nav.style.opacity = '0.5';
+      clearTimeout(scrollFadeTimeout);
+      scrollFadeTimeout = window.setTimeout(() => {
+        nav.style.opacity = '1';
+      }, 600);
+    }
+  });
+</script>

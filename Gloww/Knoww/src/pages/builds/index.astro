@@ -1,0 +1,42 @@
+---
+import SectionLayout from '../../layouts/SectionLayout.astro';
+import SectionHeading from '../../components/shared/SectionHeading.astro';
+import Card from '../../components/shared/Card.astro';
+import { getCollection } from 'astro:content';
+
+const base = import.meta.env.BASE_URL;
+const builds = (await getCollection('builds'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0));
+---
+
+<SectionLayout title="Builds" description="things i actually shipped // projects, tools, experiments">
+  <SectionHeading
+    label="builds"
+    title="things i shipped"
+    subtitle="projects that went from 'what if...' to actually working"
+    labelColor="var(--color-teal)"
+  />
+
+  {builds.length === 0 ? (
+    <div class="mt-8 rounded-2xl p-8 text-center" style="background: color-mix(in srgb, var(--color-teal) 8%, transparent);">
+      <p class="text-4xl mb-3">🔧</p>
+      <p class="text-sm" style="color: color-mix(in srgb, var(--color-navy) 50%, transparent);">
+        build logs coming soooon!! currently shipping stuff
+      </p>
+    </div>
+  ) : (
+    <div class="mt-8 space-y-4">
+      {builds.map((build) => (
+        <Card
+          title={build.data.title}
+          description={build.data.description}
+          href={`${base}builds/${build.id}/`}
+          tags={build.data.techStack.slice(0, 3)}
+          emoji="🔧"
+          accentColor="var(--color-teal)"
+        />
+      ))}
+    </div>
+  )}
+</SectionLayout>

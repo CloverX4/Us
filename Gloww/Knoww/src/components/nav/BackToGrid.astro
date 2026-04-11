@@ -1,0 +1,27 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+
+<a
+  href={base}
+  class="back-to-grid fixed top-6 left-6 z-40 flex items-center gap-2 text-sm rounded-full px-4 py-2 transition-all duration-300 hover:translate-x-[-4px]"
+  style="color: var(--color-navy); background: color-mix(in srgb, var(--color-peach) 60%, transparent); backdrop-filter: blur(8px); opacity: 0; transform: translateX(-20px);"
+>
+  <span class="text-base">←</span>
+  <span style="font-family: var(--font-body);">back to grid</span>
+</a>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const btn = document.querySelector('.back-to-grid');
+  if (btn) {
+    gsap.to(btn, {
+      opacity: 1,
+      x: 0,
+      duration: 0.5,
+      ease: 'power2.out',
+      delay: 0.3,
+    });
+  }
+</script>

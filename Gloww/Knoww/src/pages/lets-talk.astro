@@ -1,0 +1,60 @@
+---
+import SectionLayout from '../layouts/SectionLayout.astro';
+import SectionHeading from '../components/shared/SectionHeading.astro';
+---
+
+<SectionLayout title="Let's Talk" description="say hi!! always up for a good conversation">
+  <SectionHeading
+    label="let's talk"
+    title="say hi!!"
+    subtitle="i don't bite, i just ask a lot of questions"
+    labelColor="var(--color-amber)"
+  />
+
+  <div class="mt-12 flex justify-center">
+    <div
+      class="contact-card animate-float w-full max-w-md rounded-3xl p-8 text-center sm:p-10"
+      style="background: linear-gradient(135deg, color-mix(in srgb, var(--color-coral) 10%, var(--color-cream)), color-mix(in srgb, var(--color-amber) 10%, var(--color-cream))); border: 1px solid color-mix(in srgb, var(--color-coral) 15%, transparent); box-shadow: 0 8px 32px color-mix(in srgb, var(--color-coral) 10%, transparent);"
+    >
+      <div class="text-5xl mb-4">👋</div>
+
+      <h2 class="text-xl font-bold mb-2" style="font-family: var(--font-display); color: var(--color-navy);">
+        always up for a good convo
+      </h2>
+
+      <p class="text-sm mb-6" style="color: color-mix(in srgb, var(--color-navy) 50%, transparent);">
+        whether it's about product, engineering, anime, or just random interesting stuff, let's talk!!
+      </p>
+
+      <a
+        href="mailto:inandepu@gmail.com"
+        class="inline-block rounded-full px-6 py-3 text-sm font-medium text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
+        style="background: linear-gradient(135deg, var(--color-coral), var(--color-amber));"
+      >
+        inandepu@gmail.com
+      </a>
+
+      <div class="mt-6 flex items-center justify-center gap-4">
+        <a
+          href="https://github.com/CloverX4"
+          target="_blank"
+          rel="noopener"
+          class="text-sm transition-colors hover:text-[var(--color-coral)]"
+          style="color: color-mix(in srgb, var(--color-navy) 45%, transparent);"
+        >
+          github
+        </a>
+        <span style="color: color-mix(in srgb, var(--color-navy) 20%, transparent);">·</span>
+        <a
+          href="https://linkedin.com/in/indira-nandepu"
+          target="_blank"
+          rel="noopener"
+          class="text-sm transition-colors hover:text-[var(--color-coral)]"
+          style="color: color-mix(in srgb, var(--color-navy) 45%, transparent);"
+        >
+          linkedin
+        </a>
+      </div>
+    </div>
+  </div>
+</SectionLayout>

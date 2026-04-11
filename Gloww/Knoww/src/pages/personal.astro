@@ -1,0 +1,131 @@
+---
+import SectionLayout from '../layouts/SectionLayout.astro';
+import SectionHeading from '../components/shared/SectionHeading.astro';
+---
+
+<SectionLayout title="Personal" description="the non-resume stuff // anime, hobbies, vibes">
+  <SectionHeading
+    label="personal"
+    title="the human side!!"
+    subtitle="because a portfolio without personality is just... a resume"
+    labelColor="var(--color-peach)"
+  />
+
+  <div class="space-y-16 mt-8">
+    <!-- Anime section -->
+    <section>
+      <h2 class="text-2xl font-bold mb-6" style="font-family: var(--font-display); color: var(--color-navy);">
+        anime shelf 📺
+      </h2>
+      <p class="text-sm mb-6" style="color: color-mix(in srgb, var(--color-navy) 50%, transparent);">
+        yes i watch anime. no i won't apologize for it. here's what's currently on rotation:
+      </p>
+
+      <div class="flex gap-4 overflow-x-auto pb-4 -mx-2 px-2 snap-x snap-mandatory" style="scrollbar-width: thin;">
+        {[
+          { title: 'currently watching', note: 'add your current anime here!!', color: 'var(--color-coral)' },
+          { title: 'all-time fav', note: 'that one anime that changed everything', color: 'var(--color-teal)' },
+          { title: 'comfort rewatch', note: "the one you go back to when life's weird", color: 'var(--color-amber)' },
+        ].map((anime) => (
+          <div
+            class="anime-card shrink-0 w-48 rounded-2xl p-5 snap-center transition-transform duration-300 hover:scale-105"
+            style={`background: linear-gradient(to bottom, color-mix(in srgb, ${anime.color} 20%, var(--color-cream)), var(--color-cream)); border: 1px solid color-mix(in srgb, ${anime.color} 15%, transparent);`}
+          >
+            <div
+              class="mb-3 h-24 rounded-xl flex items-center justify-center text-3xl"
+              style={`background: color-mix(in srgb, ${anime.color} 10%, transparent);`}
+            >
+              📺
+            </div>
+            <h3 class="text-sm font-bold" style="font-family: var(--font-display); color: var(--color-navy);">
+              {anime.title}
+            </h3>
+            <p class="text-xs mt-1" style="color: color-mix(in srgb, var(--color-navy) 45%, transparent);">
+              {anime.note}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Interests -->
+    <section>
+      <h2 class="text-2xl font-bold mb-6" style="font-family: var(--font-display); color: var(--color-navy);">
+        other things i care about
+      </h2>
+
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {[
+          { emoji: '🎵', label: 'music', vibe: 'eclectic taste' },
+          { emoji: '☕', label: 'coffee', vibe: 'fuel for everything' },
+          { emoji: '📚', label: 'reading', vibe: 'mostly non-fiction' },
+          { emoji: '🎮', label: 'gaming', vibe: 'casual but competitive' },
+          { emoji: '🌏', label: 'exploring', vibe: 'new food, new places' },
+          { emoji: '💬', label: 'conversations', vibe: 'the deep kind' },
+        ].map((interest) => (
+          <div
+            class="interest-tile rounded-xl p-4 text-center transition-all duration-300 hover:scale-105"
+            style="background: color-mix(in srgb, var(--color-peach) 40%, transparent);"
+          >
+            <span class="block text-2xl mb-2">{interest.emoji}</span>
+            <span class="block text-sm font-bold" style="font-family: var(--font-display); color: var(--color-navy);">
+              {interest.label}
+            </span>
+            <span class="block text-xs mt-0.5" style="color: color-mix(in srgb, var(--color-navy) 40%, transparent);">
+              {interest.vibe}
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Fun facts -->
+    <section>
+      <h2 class="text-2xl font-bold mb-4" style="font-family: var(--font-display); color: var(--color-navy);">
+        random facts that didn't fit anywhere else
+      </h2>
+      <ul class="space-y-3">
+        {[
+          "i started GEP Pulse, an in-house company radio for music and office news because why not",
+          "won 2nd place in a Techathon building a Graphical Password Authenticator as an NPM package",
+          "i genuinely think the best ideas come from the most random conversations",
+          "this entire website is my rebellion against making yet another boring portfolio",
+        ].map((fact) => (
+          <li
+            class="flex items-start gap-3 text-sm"
+            style="color: color-mix(in srgb, var(--color-navy) 65%, transparent);"
+          >
+            <span style="color: var(--color-teal);">→</span>
+            {fact}
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</SectionLayout>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.utils.toArray('.anime-card').forEach((card, i) => {
+    gsap.from(card as Element, {
+      x: 40,
+      opacity: 0,
+      duration: 0.5,
+      delay: i * 0.1,
+      scrollTrigger: { trigger: card as Element, start: 'top 85%' },
+    });
+  });
+
+  gsap.utils.toArray('.interest-tile').forEach((tile, i) => {
+    gsap.from(tile as Element, {
+      y: 20,
+      opacity: 0,
+      duration: 0.4,
+      delay: i * 0.08,
+      scrollTrigger: { trigger: tile as Element, start: 'top 85%' },
+    });
+  });
+</script>

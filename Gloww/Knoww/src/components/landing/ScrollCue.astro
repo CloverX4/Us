@@ -1,0 +1,35 @@
+---
+// Animated "scroll to explore" hint between hero and grid
+---
+
+<div id="scroll-cue" class="flex flex-col items-center gap-3 py-8" style="opacity: 0;">
+  <span class="text-xs tracking-widest uppercase" style="color: color-mix(in srgb, var(--color-navy) 35%, transparent); font-family: var(--font-body);">
+    scroll to explore
+  </span>
+  <div class="animate-bounce-subtle">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 4 L10 14 M5 10 L10 15 L15 10" stroke="var(--color-teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </div>
+</div>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  const cue = document.getElementById('scroll-cue');
+  if (cue) {
+    // Fade in after hero animation
+    gsap.to(cue, { opacity: 1, duration: 0.6, delay: 1.6 });
+
+    // Fade out once user starts scrolling
+    ScrollTrigger.create({
+      start: 'top top',
+      end: '+=150',
+      onUpdate: (self) => {
+        gsap.to(cue, { opacity: 1 - self.progress * 2, duration: 0.1 });
+      },
+    });
+  }
+</script>

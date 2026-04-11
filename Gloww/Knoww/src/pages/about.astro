@@ -1,0 +1,104 @@
+---
+import SectionLayout from '../layouts/SectionLayout.astro';
+import SectionHeading from '../components/shared/SectionHeading.astro';
+---
+
+<SectionLayout title="About" description="the whole story // engineer, product thinker, forever curious">
+  <SectionHeading
+    label="about"
+    title="so, who am i??"
+    subtitle="glad you asked!! here's the whole thing"
+    labelColor="var(--color-coral)"
+  />
+
+  <div class="space-y-12 mt-8">
+    <!-- Intro -->
+    <section>
+      <p class="text-lg leading-relaxed" style="color: color-mix(in srgb, var(--color-navy) 70%, transparent);">
+        hey!! i'm <strong style="color: var(--color-coral);">Indira Nandepu</strong>, a software engineer
+        who accidentally fell in love with product thinking. currently building things at
+        <strong>GEP Worldwide</strong> in Hyderabad, but honestly?? i spend half my time
+        thinking about <em>why</em> we're building things rather than just <em>how</em>.
+      </p>
+    </section>
+
+    <!-- Timeline -->
+    <section>
+      <h2 class="text-2xl font-bold mb-8" style="font-family: var(--font-display); color: var(--color-navy);">
+        the journey so far
+      </h2>
+
+      <div class="relative space-y-8 pl-8" style="border-left: 2px solid color-mix(in srgb, var(--color-teal) 30%, transparent);">
+        <div class="timeline-node relative">
+          <div class="absolute -left-[calc(2rem+5px)] top-1 h-3 w-3 rounded-full" style="background: var(--color-teal);"></div>
+          <span class="text-xs font-medium tracking-wider uppercase" style="color: var(--color-teal);">2019 – 2023</span>
+          <h3 class="text-lg font-bold mt-1" style="font-family: var(--font-display);">NIT Warangal</h3>
+          <p class="text-sm mt-1" style="color: color-mix(in srgb, var(--color-navy) 55%, transparent);">
+            B.Tech in CSE from one of India's top engineering institutes. this is where the foundation was laid. algorithms, systems, and a LOT of curiosity.
+          </p>
+        </div>
+
+        <div class="timeline-node relative">
+          <div class="absolute -left-[calc(2rem+5px)] top-1 h-3 w-3 rounded-full" style="background: var(--color-coral);"></div>
+          <span class="text-xs font-medium tracking-wider uppercase" style="color: var(--color-coral);">2023 – present</span>
+          <h3 class="text-lg font-bold mt-1" style="font-family: var(--font-display);">GEP Worldwide</h3>
+          <p class="text-sm mt-1" style="color: color-mix(in srgb, var(--color-navy) 55%, transparent);">
+            software engineer working on enterprise analytics. led a massive DAX → SQL migration (180+ customers!!), built an AI-driven reporting system with RAG, and resolved 70+ incidents in 3 months. but the real discovery?? i love the product side more than the code side.
+          </p>
+        </div>
+
+        <div class="timeline-node relative">
+          <div class="absolute -left-[calc(2rem+5px)] top-1 h-3 w-3 rounded-full" style="background: var(--color-amber);"></div>
+          <span class="text-xs font-medium tracking-wider uppercase" style="color: var(--color-amber);">what's next</span>
+          <h3 class="text-lg font-bold mt-1" style="font-family: var(--font-display);">the product pivot</h3>
+          <p class="text-sm mt-1" style="color: color-mix(in srgb, var(--color-navy) 55%, transparent);">
+            exploring the intersection of engineering and product. i want to own decisions, design experiences, and build things people actually love. this site?? it's part of that journey.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- What drives me -->
+    <section>
+      <h2 class="text-2xl font-bold mb-4" style="font-family: var(--font-display); color: var(--color-navy);">
+        what drives me
+      </h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {[
+          { emoji: '🎯', text: 'ownership over decisions' },
+          { emoji: '🔄', text: 'user feedback loops' },
+          { emoji: '🤝', text: 'collaboration > solo execution' },
+          { emoji: '⚖️', text: 'work-life balance (non-negotiable!!)' },
+          { emoji: '💭', text: 'thinking in systems and flows' },
+          { emoji: '✨', text: 'making things people go "waaaww" about' },
+        ].map((item) => (
+          <div
+            class="flex items-center gap-3 rounded-xl p-4"
+            style="background: color-mix(in srgb, var(--color-peach) 40%, transparent);"
+          >
+            <span class="text-xl">{item.emoji}</span>
+            <span class="text-sm" style="font-family: var(--font-body); color: color-mix(in srgb, var(--color-navy) 70%, transparent);">
+              {item.text}
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</SectionLayout>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('.timeline-node').forEach((node, i) => {
+    gsap.from(node, {
+      x: -30,
+      opacity: 0,
+      duration: 0.5,
+      delay: i * 0.15,
+      scrollTrigger: { trigger: node, start: 'top 80%' },
+    });
+  });
+</script>

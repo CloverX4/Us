@@ -1,6 +1,8 @@
 ---
 import SectionLayout from '../layouts/SectionLayout.astro';
 import SectionHeading from '../components/shared/SectionHeading.astro';
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <SectionLayout title="About" description="the whole story // engineer, product thinker, forever curious">
@@ -29,24 +31,78 @@ import SectionHeading from '../components/shared/SectionHeading.astro';
       </h2>
 
       <div class="relative space-y-8 pl-8" style="border-left: 2px solid color-mix(in srgb, var(--color-teal) 30%, transparent);">
+
+        <!-- NIT Warangal -->
         <div class="timeline-node relative">
           <div class="absolute -left-[calc(2rem+5px)] top-1 h-3 w-3 rounded-full" style="background: var(--color-teal);"></div>
           <span class="text-xs font-medium tracking-wider uppercase" style="color: var(--color-teal);">2019 – 2023</span>
           <h3 class="text-lg font-bold mt-1" style="font-family: var(--font-display);">NIT Warangal</h3>
           <p class="text-sm mt-1" style="color: color-mix(in srgb, var(--color-navy) 55%, transparent);">
-            B.Tech in CSE from one of India's top engineering institutes. this is where the foundation was laid. algorithms, systems, and a LOT of curiosity.
+            B.Tech in CSE. fell in love with databases, SQL, and somehow also photography. the most fun phase of my life, no contest.
           </p>
+
+          <p class="pun-thing text-sm italic mt-2" style="color: color-mix(in srgb, var(--color-teal) 70%, var(--color-navy));"
+            data-pun="soo... i love trees. traversing them in code?? absolute dread."
+          ></p>
+
+          <details class="timeline-details mt-3">
+            <summary class="timeline-toggle text-xs font-medium cursor-pointer" style="color: var(--color-teal);">
+              <span class="toggle-open">full story ↓</span><span class="toggle-close">↑ collapse</span>
+            </summary>
+            <div class="timeline-expand mt-3 space-y-3 pl-3" style="border-left: 2px solid color-mix(in srgb, var(--color-teal) 15%, transparent);">
+              <div class="text-sm space-y-2" style="color: color-mix(in srgb, var(--color-navy) 60%, transparent);">
+                <p>
+                  <strong style="color: var(--color-navy);">databases & SQL</strong> · first time i saw data aggregations work, i was gone. been in love with SQL ever since.
+                </p>
+                <p>
+                  <strong style="color: var(--color-navy);">photography</strong> · my phone storage has been crying ever since. don't even need a reason to go out and shoot. getting myself a real camera is still on the list though.
+                  <a href={`${base}personal/`} class="inline-block ml-1 text-xs font-medium no-underline" style="color: var(--color-coral);">see my shots →</a>
+                </p>
+                <p>
+                  <strong style="color: var(--color-navy);">people skills</strong> · realized i'm genuinely good with people. made friends for life, found my crowd, learned what matters beyond code.
+                </p>
+              </div>
+            </div>
+          </details>
         </div>
 
+        <!-- GEP Worldwide -->
         <div class="timeline-node relative">
           <div class="absolute -left-[calc(2rem+5px)] top-1 h-3 w-3 rounded-full" style="background: var(--color-coral);"></div>
           <span class="text-xs font-medium tracking-wider uppercase" style="color: var(--color-coral);">2023 – present</span>
           <h3 class="text-lg font-bold mt-1" style="font-family: var(--font-display);">GEP Worldwide</h3>
           <p class="text-sm mt-1" style="color: color-mix(in srgb, var(--color-navy) 55%, transparent);">
-            software engineer working on enterprise analytics. led a massive DAX → SQL migration (180+ customers!!), built an AI-driven reporting system with RAG, and resolved 70+ incidents in 3 months. but the real discovery?? i love the product side more than the code side.
+            software engineer on enterprise analytics. migrations, AI systems, incident resolution, and a lot of learning at scale. but the real discovery?? i love the product side more than the code side.
           </p>
+
+          <p class="pun-thing text-sm italic mt-2" style="color: color-mix(in srgb, var(--color-coral) 70%, var(--color-navy));"
+            data-pun="soo... thought claude code would help, but manual debugging?? never left the scene."
+          ></p>
+
+          <details class="timeline-details mt-3">
+            <summary class="timeline-toggle text-xs font-medium cursor-pointer" style="color: var(--color-coral);">
+              <span class="toggle-open">full story ↓</span><span class="toggle-close">↑ collapse</span>
+            </summary>
+            <div class="timeline-expand mt-3 space-y-3 pl-3" style="border-left: 2px solid color-mix(in srgb, var(--color-coral) 15%, transparent);">
+              <div class="text-sm space-y-2" style="color: color-mix(in srgb, var(--color-navy) 60%, transparent);">
+                <p>
+                  <strong style="color: var(--color-navy);">DAX → SQL migration</strong> · contributed to migrating the analytics engine from DAX to SQL across 180+ customers. wrote automation scripts for onboarding that cut down manual effort and delivery timelines big time.
+                </p>
+                <p>
+                  <strong style="color: var(--color-navy);">AI-driven reporting (RAG)</strong> · built a system where users could do 28+ visualization and data operations in plain english. charts, colors, aggregations, all of it. consultants loved using it on their excel data.
+                </p>
+                <p>
+                  <strong style="color: var(--color-navy);">duplicate name detection</strong> · built product rule changes for detecting duplicate document names across reports and dashboards. sounds simple?? it's not. the rule logic got wildly complex, edge cases on edge cases.
+                </p>
+                <p>
+                  <strong style="color: var(--color-navy);">incident resolution</strong> · resolved 70+ production incidents in 3 months. nothing teaches you a system faster than debugging it at 2am.
+                </p>
+              </div>
+            </div>
+          </details>
         </div>
 
+        <!-- What's next -->
         <div class="timeline-node relative">
           <div class="absolute -left-[calc(2rem+5px)] top-1 h-3 w-3 rounded-full" style="background: var(--color-amber);"></div>
           <span class="text-xs font-medium tracking-wider uppercase" style="color: var(--color-amber);">what's next</span>
@@ -55,6 +111,36 @@ import SectionHeading from '../components/shared/SectionHeading.astro';
             exploring the intersection of engineering and product. i want to own decisions, design experiences, and build things people actually love. this site?? it's part of that journey.
           </p>
         </div>
+      </div>
+    </section>
+
+    <!-- Toolkit -->
+    <section>
+      <h2 class="text-2xl font-bold mb-6" style="font-family: var(--font-display); color: var(--color-navy);">
+        the toolkit
+      </h2>
+      <div class="flex flex-wrap gap-2">
+        {[
+          { label: 'SQL', accent: 'var(--color-teal)' },
+          { label: 'Python', accent: 'var(--color-amber)' },
+          { label: 'C#/.NET', accent: 'var(--color-coral)' },
+          { label: 'JavaScript', accent: 'var(--color-amber)' },
+          { label: 'DAX', accent: 'var(--color-teal)' },
+          { label: 'Azure', accent: 'var(--color-coral)' },
+          { label: 'Power BI', accent: 'var(--color-amber)' },
+          { label: 'RAG / LLMs', accent: 'var(--color-teal)' },
+          { label: 'Git', accent: 'var(--color-coral)' },
+          { label: 'Astro', accent: 'var(--color-amber)' },
+          { label: 'Tailwind', accent: 'var(--color-teal)' },
+          { label: 'GSAP', accent: 'var(--color-coral)' },
+        ].map((skill) => (
+          <span
+            class="skill-tag px-3 py-1.5 text-xs font-medium rounded-full"
+            style={`background: color-mix(in srgb, ${skill.accent} 12%, transparent); color: color-mix(in srgb, ${skill.accent} 85%, var(--color-navy)); border: 1px solid color-mix(in srgb, ${skill.accent} 20%, transparent); font-family: var(--font-body);`}
+          >
+            {skill.label}
+          </span>
+        ))}
       </div>
     </section>
 
@@ -87,6 +173,53 @@ import SectionHeading from '../components/shared/SectionHeading.astro';
   </div>
 </SectionLayout>
 
+<style>
+  .timeline-details summary {
+    list-style: none;
+    user-select: none;
+  }
+  .timeline-details summary::-webkit-details-marker {
+    display: none;
+  }
+  .timeline-details .toggle-close {
+    display: none;
+  }
+  .timeline-details[open] .toggle-open {
+    display: none;
+  }
+  .timeline-details[open] .toggle-close {
+    display: inline;
+    opacity: 0.5;
+  }
+  .timeline-details .timeline-expand {
+    animation: expandIn 0.3s ease-out;
+  }
+  @keyframes expandIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .pun-thing {
+    min-height: 1.8em;
+    font-family: var(--font-body);
+  }
+  .pun-thing::after {
+    content: '|';
+    animation: blink 0.6s step-end infinite;
+    margin-left: 1px;
+    font-weight: bold;
+  }
+  .pun-thing.typed::after {
+    animation: blink 0.6s step-end 3;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+</style>
+
 <script>
   import { gsap } from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -99,6 +232,43 @@ import SectionHeading from '../components/shared/SectionHeading.astro';
       duration: 0.5,
       delay: i * 0.15,
       scrollTrigger: { trigger: node, start: 'top 80%' },
+    });
+  });
+
+  // Pun thing typewriter
+  document.querySelectorAll('.pun-thing').forEach((el) => {
+    const text = (el as HTMLElement).dataset.pun || '';
+    let typed = false;
+
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 85%',
+      onEnter: () => {
+        if (typed) return;
+        typed = true;
+        let i = 0;
+        const speed = 35;
+        function type() {
+          if (i <= text.length) {
+            (el as HTMLElement).textContent = text.slice(0, i);
+            i++;
+            setTimeout(type, speed);
+          } else {
+            el.classList.add('typed');
+          }
+        }
+        type();
+      },
+    });
+  });
+
+  // Skill tags stagger
+  document.querySelectorAll('.skill-tag').forEach((tag, i) => {
+    gsap.from(tag, {
+      opacity: 0, scale: 0.8, duration: 0.3,
+      delay: i * 0.04,
+      ease: 'back.out(1.5)',
+      scrollTrigger: { trigger: tag, start: 'top 90%' },
     });
   });
 </script>

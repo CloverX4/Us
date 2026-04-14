@@ -1,0 +1,281 @@
+---
+import type { Photo } from '../../data/types';
+
+interface Props {
+  photos: { src: string; caption?: string }[];
+}
+
+const { photos } = Astro.props;
+---
+
+{photos.length > 0 && (
+  <section>
+    <h2 class="text-2xl font-bold mb-6" style="font-family: var(--font-display); color: var(--color-navy);">
+      through my lens 📸
+    </h2>
+    <p class="text-sm mb-8" style="color: color-mix(in srgb, var(--color-navy) 50%, transparent);">
+      my phone storage has been crying ever since college. here's some of what i've captured:
+    </p>
+
+    <!-- Infinite ribbon -->
+    <div class="ribbon-wrap overflow-hidden -mx-6 sm:-mx-8" style="mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);">
+      <!-- Row 1: scrolls left -->
+      <div class="ribbon-row ribbon-left flex gap-3 mb-3" data-direction="left">
+        {[...photos, ...photos].map((photo, i) => (
+          <div
+            class="ribbon-photo shrink-0 rounded-xl overflow-hidden cursor-pointer"
+            style="height: 180px;"
+            data-index={i % photos.length}
+          >
+            <img
+              src={photo.src}
+              alt={photo.caption || 'photo'}
+              class="h-full w-auto object-cover transition-transform duration-300 hover:scale-105"
+              loading="lazy"
+              style="min-width: 120px; max-width: 320px;"
+            />
+          </div>
+        ))}
+      </div>
+
+      <!-- Row 2: scrolls right (reversed order for variety) -->
+      <div class="ribbon-row ribbon-right flex gap-3" data-direction="right">
+        {[...photos.slice().reverse(), ...photos.slice().reverse()].map((photo, i) => {
+          const realIndex = photos.length - 1 - (i % photos.length);
+          return (
+            <div
+              class="ribbon-photo shrink-0 rounded-xl overflow-hidden cursor-pointer"
+              style="height: 160px;"
+              data-index={realIndex}
+            >
+              <img
+                src={photo.src}
+                alt={photo.caption || 'photo'}
+                class="h-full w-auto object-cover transition-transform duration-300 hover:scale-105"
+                loading="lazy"
+                style="min-width: 100px; max-width: 280px;"
+              />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+
+    <!-- Lightbox overlay -->
+    <div id="photo-lightbox" class="fixed inset-0 z-[100] hidden" style="background: rgba(26,26,46,0.92); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);">
+      <!-- Close button -->
+      <button id="lb-close" class="absolute top-5 right-5 z-10 w-10 h-10 flex items-center justify-center rounded-full text-white/60 hover:text-white transition-colors" style="background: rgba(255,255,255,0.1);">
+        ✕
+      </button>
+
+      <!-- Main layout -->
+      <div class="h-full flex flex-col items-center justify-center px-4">
+        <!-- Center photo -->
+        <div class="relative flex items-center justify-center" style="max-height: 70vh; max-width: 90vw;">
+          <img id="lb-main" src="" alt="" class="max-h-[70vh] max-w-[90vw] sm:max-w-[70vw] object-contain rounded-xl shadow-2xl transition-opacity duration-300" />
+        </div>
+
+        <!-- Caption -->
+        <p id="lb-caption" class="mt-4 text-sm text-white/70 text-center" style="font-family: var(--font-body); min-height: 1.5em;"></p>
+
+        <!-- Deck strip: prev/next photos -->
+        <div class="mt-6 flex items-center gap-2 sm:gap-3">
+          <button id="lb-prev" class="shrink-0 w-8 h-8 flex items-center justify-center rounded-full text-white/50 hover:text-white transition-colors" style="background: rgba(255,255,255,0.08);">
+            ‹
+          </button>
+
+          <div id="lb-deck" class="flex items-center gap-2 overflow-hidden" style="max-width: 70vw;">
+            <!-- Deck thumbnails rendered by JS -->
+          </div>
+
+          <button id="lb-next" class="shrink-0 w-8 h-8 flex items-center justify-center rounded-full text-white/50 hover:text-white transition-colors" style="background: rgba(255,255,255,0.08);">
+            ›
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .ribbon-row {
+    will-change: transform;
+  }
+
+  .ribbon-photo {
+    transition: box-shadow 0.3s;
+  }
+
+  .ribbon-photo:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+
+  #photo-lightbox.active {
+    display: flex;
+  }
+
+  /* Deck thumbnail */
+  .deck-thumb {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0.4;
+    border: 2px solid transparent;
+  }
+
+  .deck-thumb:hover {
+    opacity: 0.7;
+  }
+
+  .deck-thumb.active {
+    opacity: 1;
+    border-color: var(--color-coral);
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  // ── Ribbon auto-scroll ──
+  const rows = document.querySelectorAll('.ribbon-row');
+  const ribbonAnims: gsap.core.Tween[] = [];
+
+  rows.forEach((row) => {
+    const dir = row.getAttribute('data-direction');
+    const scrollWidth = row.scrollWidth / 2;
+
+    // Position: start at 0 for left, at -scrollWidth for right
+    if (dir === 'right') {
+      gsap.set(row, { x: -scrollWidth });
+    }
+
+    const anim = gsap.to(row, {
+      x: dir === 'left' ? -scrollWidth : 0,
+      duration: dir === 'left' ? 40 : 45,
+      ease: 'none',
+      repeat: -1,
+    });
+
+    ribbonAnims.push(anim);
+  });
+
+  // Pause on hover
+  const ribbonWrap = document.querySelector('.ribbon-wrap');
+  if (ribbonWrap) {
+    ribbonWrap.addEventListener('mouseenter', () => ribbonAnims.forEach(a => a.timeScale(0.2)));
+    ribbonWrap.addEventListener('mouseleave', () => ribbonAnims.forEach(a => a.timeScale(1)));
+  }
+
+  // ── Lightbox ──
+  const lightbox = document.getElementById('photo-lightbox')!;
+  const lbMain = document.getElementById('lb-main') as HTMLImageElement;
+  const lbCaption = document.getElementById('lb-caption')!;
+  const lbDeck = document.getElementById('lb-deck')!;
+  const lbClose = document.getElementById('lb-close')!;
+  const lbPrev = document.getElementById('lb-prev')!;
+  const lbNext = document.getElementById('lb-next')!;
+
+  // Collect unique photo data from ribbon
+  const photoEls = document.querySelectorAll('.ribbon-photo');
+  const photoMap = new Map<number, { src: string; caption: string }>();
+  photoEls.forEach((el) => {
+    const idx = parseInt(el.getAttribute('data-index') || '0');
+    if (!photoMap.has(idx)) {
+      const img = el.querySelector('img')!;
+      photoMap.set(idx, { src: img.src, caption: img.alt === 'photo' ? '' : img.alt });
+    }
+  });
+
+  const photos = Array.from(photoMap.entries()).sort((a, b) => a[0] - b[0]).map(e => e[1]);
+  let currentIdx = 0;
+
+  function showPhoto(idx: number) {
+    currentIdx = ((idx % photos.length) + photos.length) % photos.length;
+    const photo = photos[currentIdx];
+
+    lbMain.style.opacity = '0';
+    setTimeout(() => {
+      lbMain.src = photo.src;
+      lbMain.alt = photo.caption || 'photo';
+      lbMain.style.opacity = '1';
+    }, 150);
+
+    lbCaption.textContent = photo.caption || '';
+    renderDeck();
+  }
+
+  function renderDeck() {
+    lbDeck.innerHTML = '';
+    // Show 4 on each side (9 total) on desktop, fewer on mobile
+    const count = window.innerWidth >= 640 ? 4 : 2;
+
+    for (let offset = -count; offset <= count; offset++) {
+      const idx = ((currentIdx + offset) % photos.length + photos.length) % photos.length;
+      const photo = photos[idx];
+
+      const thumb = document.createElement('div');
+      thumb.className = `deck-thumb ${offset === 0 ? 'active' : ''}`;
+      thumb.style.width = offset === 0 ? '56px' : '44px';
+      thumb.style.height = offset === 0 ? '42px' : '34px';
+      thumb.style.flexShrink = '0';
+
+      const img = document.createElement('img');
+      img.src = photo.src;
+      img.alt = '';
+      img.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+      img.loading = 'lazy';
+
+      thumb.appendChild(img);
+      thumb.addEventListener('click', () => showPhoto(idx));
+      lbDeck.appendChild(thumb);
+    }
+  }
+
+  function openLightbox(idx: number) {
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    showPhoto(idx);
+
+    gsap.fromTo(lightbox, { opacity: 0 }, { opacity: 1, duration: 0.3 });
+    gsap.fromTo(lbMain, { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, delay: 0.1 });
+  }
+
+  function closeLightbox() {
+    gsap.to(lightbox, {
+      opacity: 0,
+      duration: 0.25,
+      onComplete: () => {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+      },
+    });
+  }
+
+  // Click ribbon photos to open lightbox
+  photoEls.forEach((el) => {
+    el.addEventListener('click', () => {
+      const idx = parseInt(el.getAttribute('data-index') || '0');
+      openLightbox(idx);
+    });
+  });
+
+  lbClose.addEventListener('click', closeLightbox);
+  lbPrev.addEventListener('click', () => showPhoto(currentIdx - 1));
+  lbNext.addEventListener('click', () => showPhoto(currentIdx + 1));
+
+  // Click backdrop to close
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox || (e.target as Element).closest('#photo-lightbox > div')?.querySelector('#lb-main') === null) {
+      // Only close if clicking the dark area, not the content
+    }
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') showPhoto(currentIdx - 1);
+    if (e.key === 'ArrowRight') showPhoto(currentIdx + 1);
+  });
+</script>

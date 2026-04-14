@@ -36,7 +36,7 @@ export const timeline: TimelineEntry[] = [
     title: 'GEP Worldwide',
     summary: "software engineer on enterprise analytics. migrations, AI systems, incident resolution, and a lot of learning at scale. but the real discovery?? i love the product side more than the code side.",
     color: 'var(--color-coral)',
-    pun: "soo... thought claude code would help, but manual debugging?? never left the scene.",
+    pun: "while i thought... claude code would help, manual debugging?? never left the scene.",
     details: [
       {
         label: 'DAX → SQL migration',

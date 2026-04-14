@@ -5,6 +5,8 @@
 import type { AnimeCard, Interest, Photo } from './types';
 
 // ── Anime shelf ──
+// Drop cover art in src/data/anime/ and set the 'image' field to the filename.
+// Leave image blank to show the 📺 placeholder.
 
 export const animeShelf: AnimeCard[] = [
   { title: 'currently watching', note: 'add your current anime here!!', color: 'var(--color-coral)' },
@@ -13,13 +15,17 @@ export const animeShelf: AnimeCard[] = [
 ];
 
 // ── Photography ──
-// Drop images in src/data/photography/ and add entries here.
-// 'file' is just the filename — the component resolves the full path.
+// Option 1: Drop images in src/data/photography/ and use 'file'
+// Option 2: Use 'url' for external/hosted images
+// Caption is optional.
 
 export const photography: Photo[] = [
-  // { file: 'sunset.jpg', caption: 'golden hour never disappoints' },
-  // { file: 'street.jpg', caption: 'random walk in the city' },
-  // { file: 'food.jpg' },
+  { url: 'https://picsum.photos/seed/about-knoww/700/500', caption: 'test shot one' },
+  { url: 'https://picsum.photos/seed/til-knoww/600/400', caption: 'test shot two' },
+  { url: 'https://picsum.photos/seed/product-knoww/600/400', caption: 'test shot three' },
+  { url: 'https://picsum.photos/seed/personal-vibes/600/500' },
+  { url: 'https://picsum.photos/seed/builds-knoww/700/400', caption: 'test shot five' },
+  { url: 'https://picsum.photos/seed/talk-knoww/500/400' },
 ];
 
 // ── Interests ──

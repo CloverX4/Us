@@ -3,12 +3,23 @@ import SectionLayout from '../layouts/SectionLayout.astro';
 import SectionHeading from '../components/shared/SectionHeading.astro';
 import { animeShelf, interests, funFacts, photography } from '../data/personal';
 
-// Resolve photography images from src/data/photography/
+// Resolve images from src/data/
 const photoImages = import.meta.glob<{ default: ImageMetadata }>('/src/data/photography/*.{jpg,jpeg,png,webp}', { eager: true });
+const animeImages = import.meta.glob<{ default: ImageMetadata }>('/src/data/anime/*.{jpg,jpeg,png,webp}', { eager: true });
 
-function resolvePhoto(file: string) {
-  const key = `/src/data/photography/${file}`;
-  return photoImages[key]?.default?.src;
+function resolvePhoto(photo: { file?: string; url?: string }) {
+  if (photo.url) return photo.url;
+  if (photo.file) {
+    const key = `/src/data/photography/${photo.file}`;
+    return photoImages[key]?.default?.src;
+  }
+  return null;
+}
+
+function resolveAnime(file?: string) {
+  if (!file) return null;
+  const key = `/src/data/anime/${file}`;
+  return animeImages[key]?.default?.src;
 }
 ---
 
@@ -31,25 +42,31 @@ function resolvePhoto(file: string) {
       </p>
 
       <div class="flex gap-4 overflow-x-auto pb-4 -mx-2 px-2 snap-x snap-mandatory" style="scrollbar-width: thin;">
-        {animeShelf.map((anime) => (
-          <div
-            class="anime-card shrink-0 w-48 rounded-2xl p-5 snap-center transition-transform duration-300 hover:scale-105"
-            style={`background: linear-gradient(to bottom, color-mix(in srgb, ${anime.color} 20%, var(--color-cream)), var(--color-cream)); border: 1px solid color-mix(in srgb, ${anime.color} 15%, transparent);`}
-          >
+        {animeShelf.map((anime) => {
+          const coverSrc = resolveAnime(anime.image);
+          return (
             <div
-              class="mb-3 h-24 rounded-xl flex items-center justify-center text-3xl"
-              style={`background: color-mix(in srgb, ${anime.color} 10%, transparent);`}
+              class="anime-card shrink-0 w-48 rounded-2xl p-5 snap-center transition-transform duration-300 hover:scale-105"
+              style={`background: linear-gradient(to bottom, color-mix(in srgb, ${anime.color} 20%, var(--color-cream)), var(--color-cream)); border: 1px solid color-mix(in srgb, ${anime.color} 15%, transparent);`}
             >
-              📺
+              <div
+                class="mb-3 h-28 rounded-xl overflow-hidden flex items-center justify-center text-3xl"
+                style={`background: color-mix(in srgb, ${anime.color} 10%, transparent);`}
+              >
+                {coverSrc
+                  ? <img src={coverSrc} alt={anime.title} class="w-full h-full object-cover" loading="lazy" />
+                  : '📺'
+                }
+              </div>
+              <h3 class="text-sm font-bold" style="font-family: var(--font-display); color: var(--color-navy);">
+                {anime.title}
+              </h3>
+              <p class="text-xs mt-1" style="color: color-mix(in srgb, var(--color-navy) 45%, transparent);">
+                {anime.note}
+              </p>
             </div>
-            <h3 class="text-sm font-bold" style="font-family: var(--font-display); color: var(--color-navy);">
-              {anime.title}
-            </h3>
-            <p class="text-xs mt-1" style="color: color-mix(in srgb, var(--color-navy) 45%, transparent);">
-              {anime.note}
-            </p>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
 
@@ -65,7 +82,7 @@ function resolvePhoto(file: string) {
 
         <div class="photo-grid columns-2 sm:columns-3 gap-3 space-y-3">
           {photography.map((photo) => {
-            const src = resolvePhoto(photo.file);
+            const src = resolvePhoto(photo);
             return src ? (
               <div class="photo-item break-inside-avoid rounded-xl overflow-hidden group">
                 <div class="relative">

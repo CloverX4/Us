@@ -52,6 +52,7 @@ export interface AnimeCard {
   title: string;
   note: string;
   color: string;
+  image?: string;   // cover art filename in src/data/anime/ (e.g. 'naruto.jpg')
 }
 
 export interface Interest {
@@ -61,7 +62,8 @@ export interface Interest {
 }
 
 export interface Photo {
-  file: string;      // filename in src/data/photography/ (e.g. 'sunset.jpg')
+  file?: string;     // filename in src/data/photography/ (e.g. 'sunset.jpg')
+  url?: string;      // or a direct URL for external images
   caption?: string;
 }
 

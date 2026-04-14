@@ -1,70 +1,19 @@
 ---
 import PaletteTile from './PaletteTile.astro';
+import { sections } from '../../data/sections';
 
 const base = import.meta.env.BASE_URL;
 
-const tiles = [
-  {
-    title: 'About',
-    subtitle: 'the whole story',
-    href: `${base}about/`,
-    color: 'var(--color-coral)',
-    gradientDir: 'to bottom right',
-    icon: '✨',
-    peek: "engineer turned product curious. here's how that happened",
-    gridArea: 'about',
-  },
-  {
-    title: 'TIL',
-    subtitle: 'today i learned',
-    href: `${base}til/`,
-    color: 'var(--color-teal)',
-    gradientDir: 'to top right',
-    icon: '🧠',
-    peek: 'random things that made me go waaaww',
-    gridArea: 'til',
-  },
-  {
-    title: 'Product',
-    subtitle: 'thinking out loud',
-    href: `${base}product/`,
-    color: 'var(--color-amber)',
-    gradientDir: 'to bottom left',
-    icon: '💡',
-    peek: 'case studies & teardowns & random product thoughts',
-    gridArea: 'product',
-  },
-  {
-    title: 'Builds',
-    subtitle: 'things i shipped',
-    href: `${base}builds/`,
-    color: 'var(--color-navy)',
-    gradientDir: 'to right',
-    icon: '🔧',
-    peek: 'Floww & more, the stuff i actually built',
-    gridArea: 'builds',
-  },
-  {
-    title: 'Personal',
-    subtitle: 'the human side',
-    href: `${base}personal/`,
-    color: 'var(--color-peach)',
-    gradientDir: 'to top',
-    icon: '⭐',
-    peek: 'anime, hobbies, vibes, the non-resume stuff',
-    gridArea: 'personal',
-  },
-  {
-    title: "Let's Talk",
-    subtitle: 'say hi!!',
-    href: `${base}lets-talk/`,
-    color: 'var(--color-coral)',
-    gradientDir: 'to bottom right',
-    icon: '👋',
-    peek: 'inandepu@gmail.com // always up for a good convo',
-    gridArea: 'talk',
-  },
-];
+const tiles = sections.map((s) => ({
+  title: s.title,
+  subtitle: s.subtitle,
+  href: `${base}${s.path}`,
+  color: s.cssColor,
+  gradientDir: s.gradientDir,
+  icon: s.icon,
+  peek: s.peek,
+  gridArea: s.id,
+}));
 ---
 
 <section class="relative px-4 py-16 sm:px-6 lg:px-12">

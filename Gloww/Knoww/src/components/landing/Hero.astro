@@ -1,64 +1,18 @@
 ---
+import { sections } from '../../data/sections';
+
 const base = import.meta.env.BASE_URL;
 
-const tiles = [
-  {
-    title: 'About',
-    peek: "engineer turned product curious",
-    href: `${base}about/`,
-    color: '#FF6B6B',
-    img: 'https://picsum.photos/seed/about-knoww/700/500',
-    area: 'about',
-    fade: 0,
-  },
-  {
-    title: 'TIL',
-    peek: "things that made me go waaaww",
-    href: `${base}til/`,
-    color: '#4ECDC4',
-    img: 'https://picsum.photos/seed/til-knoww/600/400',
-    area: 'til',
-    fade: 1,
-    bleedOrigin: '100% 100%',  // bottom-right corner
-  },
-  {
-    title: 'Product',
-    peek: "teardowns and product thoughts",
-    href: `${base}product/`,
-    color: '#FFB347',
-    img: 'https://picsum.photos/seed/product-knoww/600/400',
-    area: 'product',
-    fade: 0,
-  },
-  {
-    title: 'Builds',
-    peek: "Floww & more",
-    href: `${base}builds/`,
-    color: '#FF6B6B',
-    img: 'https://picsum.photos/seed/builds-knoww/700/400',
-    area: 'builds',
-    fade: 1,
-  },
-  {
-    title: 'Personal',
-    peek: "anime, hobbies, vibes",
-    href: `${base}personal/`,
-    color: '#1A1A2E',
-    img: 'https://picsum.photos/seed/personal-vibes/600/500',
-    area: 'personal',
-    fade: 1,
-    bleedOrigin: '100% 0%',    // top-right corner
-  },
-  {
-    title: "Let's Talk",
-    peek: "say hi!!",
-    href: `${base}lets-talk/`,
-    color: '#F7E8D4',
-    img: 'https://picsum.photos/seed/talk-knoww/500/400',
-    area: 'talk',
-    fade: 0,
-  },
-];
+const tiles = sections.map((s) => ({
+  title: s.title,
+  peek: s.peek,
+  href: `${base}${s.path}`,
+  color: s.hex,
+  img: s.img,
+  area: s.id,
+  fade: s.fade,
+  bleedOrigin: s.bleedOrigin,
+}));
 
 const tileShadow = '0 2px 6px rgba(0,0,0,0.06), 0 8px 25px rgba(0,0,0,0.10), 0 20px 50px rgba(0,0,0,0.08), 0 0 40px rgba(255,255,255,0.5)';
 // bleed tiles: color fades to transparent on the right, no hard right edge

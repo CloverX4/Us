@@ -1,6 +1,15 @@
 ---
 import SectionLayout from '../layouts/SectionLayout.astro';
 import SectionHeading from '../components/shared/SectionHeading.astro';
+import { animeShelf, interests, funFacts, photography } from '../data/personal';
+
+// Resolve photography images from src/data/photography/
+const photoImages = import.meta.glob<{ default: ImageMetadata }>('/src/data/photography/*.{jpg,jpeg,png,webp}', { eager: true });
+
+function resolvePhoto(file: string) {
+  const key = `/src/data/photography/${file}`;
+  return photoImages[key]?.default?.src;
+}
 ---
 
 <SectionLayout title="Personal" description="the non-resume stuff // anime, hobbies, vibes">
@@ -22,11 +31,7 @@ import SectionHeading from '../components/shared/SectionHeading.astro';
       </p>
 
       <div class="flex gap-4 overflow-x-auto pb-4 -mx-2 px-2 snap-x snap-mandatory" style="scrollbar-width: thin;">
-        {[
-          { title: 'currently watching', note: 'add your current anime here!!', color: 'var(--color-coral)' },
-          { title: 'all-time fav', note: 'that one anime that changed everything', color: 'var(--color-teal)' },
-          { title: 'comfort rewatch', note: "the one you go back to when life's weird", color: 'var(--color-amber)' },
-        ].map((anime) => (
+        {animeShelf.map((anime) => (
           <div
             class="anime-card shrink-0 w-48 rounded-2xl p-5 snap-center transition-transform duration-300 hover:scale-105"
             style={`background: linear-gradient(to bottom, color-mix(in srgb, ${anime.color} 20%, var(--color-cream)), var(--color-cream)); border: 1px solid color-mix(in srgb, ${anime.color} 15%, transparent);`}
@@ -48,6 +53,41 @@ import SectionHeading from '../components/shared/SectionHeading.astro';
       </div>
     </section>
 
+    <!-- Photography (right after anime) -->
+    {photography.length > 0 && (
+      <section>
+        <h2 class="text-2xl font-bold mb-6" style="font-family: var(--font-display); color: var(--color-navy);">
+          through my lens 📸
+        </h2>
+        <p class="text-sm mb-6" style="color: color-mix(in srgb, var(--color-navy) 50%, transparent);">
+          my phone storage has been crying ever since college. here's some of what i've captured:
+        </p>
+
+        <div class="photo-grid columns-2 sm:columns-3 gap-3 space-y-3">
+          {photography.map((photo) => {
+            const src = resolvePhoto(photo.file);
+            return src ? (
+              <div class="photo-item break-inside-avoid rounded-xl overflow-hidden group">
+                <div class="relative">
+                  <img
+                    src={src}
+                    alt={photo.caption || 'photo'}
+                    class="w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  {photo.caption && (
+                    <div class="absolute bottom-0 left-0 right-0 px-3 py-2 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <p class="text-xs text-white/90" style="font-family: var(--font-body);">{photo.caption}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : null;
+          })}
+        </div>
+      </section>
+    )}
+
     <!-- Interests -->
     <section>
       <h2 class="text-2xl font-bold mb-6" style="font-family: var(--font-display); color: var(--color-navy);">
@@ -55,14 +95,7 @@ import SectionHeading from '../components/shared/SectionHeading.astro';
       </h2>
 
       <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {[
-          { emoji: '🎵', label: 'music', vibe: 'eclectic taste' },
-          { emoji: '☕', label: 'coffee', vibe: 'fuel for everything' },
-          { emoji: '📚', label: 'reading', vibe: 'mostly non-fiction' },
-          { emoji: '🎮', label: 'gaming', vibe: 'casual but competitive' },
-          { emoji: '🌏', label: 'exploring', vibe: 'new food, new places' },
-          { emoji: '💬', label: 'conversations', vibe: 'the deep kind' },
-        ].map((interest) => (
+        {interests.map((interest) => (
           <div
             class="interest-tile rounded-xl p-4 text-center transition-all duration-300 hover:scale-105"
             style="background: color-mix(in srgb, var(--color-peach) 40%, transparent);"
@@ -85,12 +118,7 @@ import SectionHeading from '../components/shared/SectionHeading.astro';
         random facts that didn't fit anywhere else
       </h2>
       <ul class="space-y-3">
-        {[
-          "i started GEP Pulse, an in-house company radio for music and office news because why not",
-          "won 2nd place in a Techathon building a Graphical Password Authenticator as an NPM package",
-          "i genuinely think the best ideas come from the most random conversations",
-          "this entire website is my rebellion against making yet another boring portfolio",
-        ].map((fact) => (
+        {funFacts.map((fact) => (
           <li
             class="flex items-start gap-3 text-sm"
             style="color: color-mix(in srgb, var(--color-navy) 65%, transparent);"
@@ -116,6 +144,16 @@ import SectionHeading from '../components/shared/SectionHeading.astro';
       duration: 0.5,
       delay: i * 0.1,
       scrollTrigger: { trigger: card as Element, start: 'top 85%' },
+    });
+  });
+
+  gsap.utils.toArray('.photo-item').forEach((item, i) => {
+    gsap.from(item as Element, {
+      opacity: 0,
+      y: 30,
+      duration: 0.5,
+      delay: i * 0.08,
+      scrollTrigger: { trigger: item as Element, start: 'top 90%' },
     });
   });
 

@@ -1,6 +1,7 @@
 ---
 import SectionLayout from '../layouts/SectionLayout.astro';
 import SectionHeading from '../components/shared/SectionHeading.astro';
+import { timeline, toolkit, drives } from '../data/about';
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -31,86 +32,42 @@ const base = import.meta.env.BASE_URL;
       </h2>
 
       <div class="relative space-y-8 pl-8" style="border-left: 2px solid color-mix(in srgb, var(--color-teal) 30%, transparent);">
+        {timeline.map((entry) => (
+          <div class="timeline-node relative">
+            <div class="absolute -left-[calc(2rem+5px)] top-1 h-3 w-3 rounded-full" style={`background: ${entry.color};`}></div>
+            <span class="text-xs font-medium tracking-wider uppercase" style={`color: ${entry.color};`}>{entry.dateRange}</span>
+            <h3 class="text-lg font-bold mt-1" style="font-family: var(--font-display);">{entry.title}</h3>
+            <p class="text-sm mt-1" style="color: color-mix(in srgb, var(--color-navy) 55%, transparent);">
+              {entry.summary}
+            </p>
 
-        <!-- NIT Warangal -->
-        <div class="timeline-node relative">
-          <div class="absolute -left-[calc(2rem+5px)] top-1 h-3 w-3 rounded-full" style="background: var(--color-teal);"></div>
-          <span class="text-xs font-medium tracking-wider uppercase" style="color: var(--color-teal);">2019 – 2023</span>
-          <h3 class="text-lg font-bold mt-1" style="font-family: var(--font-display);">NIT Warangal</h3>
-          <p class="text-sm mt-1" style="color: color-mix(in srgb, var(--color-navy) 55%, transparent);">
-            B.Tech in CSE. fell in love with databases, SQL, and somehow also photography. the most fun phase of my life, no contest.
-          </p>
+            {entry.pun && (
+              <p class="pun-thing text-sm italic mt-2" style={`color: color-mix(in srgb, ${entry.color} 70%, var(--color-navy));`}
+                data-pun={entry.pun}
+              ></p>
+            )}
 
-          <p class="pun-thing text-sm italic mt-2" style="color: color-mix(in srgb, var(--color-teal) 70%, var(--color-navy));"
-            data-pun="soo... i love trees. traversing them in code?? absolute dread."
-          ></p>
-
-          <details class="timeline-details mt-3">
-            <summary class="timeline-toggle text-xs font-medium cursor-pointer" style="color: var(--color-teal);">
-              <span class="toggle-open">full story ↓</span><span class="toggle-close">↑ collapse</span>
-            </summary>
-            <div class="timeline-expand mt-3 space-y-3 pl-3" style="border-left: 2px solid color-mix(in srgb, var(--color-teal) 15%, transparent);">
-              <div class="text-sm space-y-2" style="color: color-mix(in srgb, var(--color-navy) 60%, transparent);">
-                <p>
-                  <strong style="color: var(--color-navy);">databases & SQL</strong> · first time i saw data aggregations work, i was gone. been in love with SQL ever since.
-                </p>
-                <p>
-                  <strong style="color: var(--color-navy);">photography</strong> · my phone storage has been crying ever since. don't even need a reason to go out and shoot. getting myself a real camera is still on the list though.
-                  <a href={`${base}personal/`} class="inline-block ml-1 text-xs font-medium no-underline" style="color: var(--color-coral);">see my shots →</a>
-                </p>
-                <p>
-                  <strong style="color: var(--color-navy);">people skills</strong> · realized i'm genuinely good with people. made friends for life, found my crowd, learned what matters beyond code.
-                </p>
-              </div>
-            </div>
-          </details>
-        </div>
-
-        <!-- GEP Worldwide -->
-        <div class="timeline-node relative">
-          <div class="absolute -left-[calc(2rem+5px)] top-1 h-3 w-3 rounded-full" style="background: var(--color-coral);"></div>
-          <span class="text-xs font-medium tracking-wider uppercase" style="color: var(--color-coral);">2023 – present</span>
-          <h3 class="text-lg font-bold mt-1" style="font-family: var(--font-display);">GEP Worldwide</h3>
-          <p class="text-sm mt-1" style="color: color-mix(in srgb, var(--color-navy) 55%, transparent);">
-            software engineer on enterprise analytics. migrations, AI systems, incident resolution, and a lot of learning at scale. but the real discovery?? i love the product side more than the code side.
-          </p>
-
-          <p class="pun-thing text-sm italic mt-2" style="color: color-mix(in srgb, var(--color-coral) 70%, var(--color-navy));"
-            data-pun="soo... thought claude code would help, but manual debugging?? never left the scene."
-          ></p>
-
-          <details class="timeline-details mt-3">
-            <summary class="timeline-toggle text-xs font-medium cursor-pointer" style="color: var(--color-coral);">
-              <span class="toggle-open">full story ↓</span><span class="toggle-close">↑ collapse</span>
-            </summary>
-            <div class="timeline-expand mt-3 space-y-3 pl-3" style="border-left: 2px solid color-mix(in srgb, var(--color-coral) 15%, transparent);">
-              <div class="text-sm space-y-2" style="color: color-mix(in srgb, var(--color-navy) 60%, transparent);">
-                <p>
-                  <strong style="color: var(--color-navy);">DAX → SQL migration</strong> · contributed to migrating the analytics engine from DAX to SQL across 180+ customers. wrote automation scripts for onboarding that cut down manual effort and delivery timelines big time.
-                </p>
-                <p>
-                  <strong style="color: var(--color-navy);">AI-driven reporting (RAG)</strong> · built a system where users could do 28+ visualization and data operations in plain english. charts, colors, aggregations, all of it. consultants loved using it on their excel data.
-                </p>
-                <p>
-                  <strong style="color: var(--color-navy);">duplicate name detection</strong> · built product rule changes for detecting duplicate document names across reports and dashboards. sounds simple?? it's not. the rule logic got wildly complex, edge cases on edge cases.
-                </p>
-                <p>
-                  <strong style="color: var(--color-navy);">incident resolution</strong> · resolved 70+ production incidents in 3 months. nothing teaches you a system faster than debugging it at 2am.
-                </p>
-              </div>
-            </div>
-          </details>
-        </div>
-
-        <!-- What's next -->
-        <div class="timeline-node relative">
-          <div class="absolute -left-[calc(2rem+5px)] top-1 h-3 w-3 rounded-full" style="background: var(--color-amber);"></div>
-          <span class="text-xs font-medium tracking-wider uppercase" style="color: var(--color-amber);">what's next</span>
-          <h3 class="text-lg font-bold mt-1" style="font-family: var(--font-display);">the product pivot</h3>
-          <p class="text-sm mt-1" style="color: color-mix(in srgb, var(--color-navy) 55%, transparent);">
-            exploring the intersection of engineering and product. i want to own decisions, design experiences, and build things people actually love. this site?? it's part of that journey.
-          </p>
-        </div>
+            {entry.details && entry.details.length > 0 && (
+              <details class="timeline-details mt-3">
+                <summary class="timeline-toggle text-xs font-medium cursor-pointer" style={`color: ${entry.color};`}>
+                  <span class="toggle-open">full story ↓</span><span class="toggle-close">↑ collapse</span>
+                </summary>
+                <div class="timeline-expand mt-3 space-y-3 pl-3" style={`border-left: 2px solid color-mix(in srgb, ${entry.color} 15%, transparent);`}>
+                  <div class="text-sm space-y-2" style="color: color-mix(in srgb, var(--color-navy) 60%, transparent);">
+                    {entry.details.map((detail) => (
+                      <p>
+                        <strong style="color: var(--color-navy);">{detail.label}</strong> · {detail.text}
+                        {detail.link && (
+                          <a href={`${base}${detail.link.href}`} class="inline-block ml-1 text-xs font-medium no-underline" style="color: var(--color-coral);">{detail.link.text}</a>
+                        )}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              </details>
+            )}
+          </div>
+        ))}
       </div>
     </section>
 
@@ -120,20 +77,7 @@ const base = import.meta.env.BASE_URL;
         the toolkit
       </h2>
       <div class="flex flex-wrap gap-2">
-        {[
-          { label: 'SQL', accent: 'var(--color-teal)' },
-          { label: 'Python', accent: 'var(--color-amber)' },
-          { label: 'C#/.NET', accent: 'var(--color-coral)' },
-          { label: 'JavaScript', accent: 'var(--color-amber)' },
-          { label: 'DAX', accent: 'var(--color-teal)' },
-          { label: 'Azure', accent: 'var(--color-coral)' },
-          { label: 'Power BI', accent: 'var(--color-amber)' },
-          { label: 'RAG / LLMs', accent: 'var(--color-teal)' },
-          { label: 'Git', accent: 'var(--color-coral)' },
-          { label: 'Astro', accent: 'var(--color-amber)' },
-          { label: 'Tailwind', accent: 'var(--color-teal)' },
-          { label: 'GSAP', accent: 'var(--color-coral)' },
-        ].map((skill) => (
+        {toolkit.map((skill) => (
           <span
             class="skill-tag px-3 py-1.5 text-xs font-medium rounded-full"
             style={`background: color-mix(in srgb, ${skill.accent} 12%, transparent); color: color-mix(in srgb, ${skill.accent} 85%, var(--color-navy)); border: 1px solid color-mix(in srgb, ${skill.accent} 20%, transparent); font-family: var(--font-body);`}
@@ -150,14 +94,7 @@ const base = import.meta.env.BASE_URL;
         what drives me
       </h2>
       <div class="grid gap-4 sm:grid-cols-2">
-        {[
-          { emoji: '🎯', text: 'ownership over decisions' },
-          { emoji: '🔄', text: 'user feedback loops' },
-          { emoji: '🤝', text: 'collaboration > solo execution' },
-          { emoji: '⚖️', text: 'work-life balance (non-negotiable!!)' },
-          { emoji: '💭', text: 'thinking in systems and flows' },
-          { emoji: '✨', text: 'making things people go "waaaww" about' },
-        ].map((item) => (
+        {drives.map((item) => (
           <div
             class="flex items-center gap-3 rounded-xl p-4"
             style="background: color-mix(in srgb, var(--color-peach) 40%, transparent);"

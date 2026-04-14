@@ -1,6 +1,7 @@
 ---
 import SectionLayout from '../layouts/SectionLayout.astro';
 import SectionHeading from '../components/shared/SectionHeading.astro';
+import { email, socials } from '../data/contact';
 ---
 
 <SectionLayout title="Let's Talk" description="say hi!! always up for a good conversation">
@@ -27,33 +28,28 @@ import SectionHeading from '../components/shared/SectionHeading.astro';
       </p>
 
       <a
-        href="mailto:inandepu@gmail.com"
+        href={`mailto:${email}`}
         class="inline-block rounded-full px-6 py-3 text-sm font-medium text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
         style="background: linear-gradient(135deg, var(--color-coral), var(--color-amber));"
       >
-        inandepu@gmail.com
+        {email}
       </a>
 
       <div class="mt-6 flex items-center justify-center gap-4">
-        <a
-          href="https://github.com/CloverX4"
-          target="_blank"
-          rel="noopener"
-          class="text-sm transition-colors hover:text-[var(--color-coral)]"
-          style="color: color-mix(in srgb, var(--color-navy) 45%, transparent);"
-        >
-          github
-        </a>
-        <span style="color: color-mix(in srgb, var(--color-navy) 20%, transparent);">·</span>
-        <a
-          href="https://linkedin.com/in/indira-nandepu"
-          target="_blank"
-          rel="noopener"
-          class="text-sm transition-colors hover:text-[var(--color-coral)]"
-          style="color: color-mix(in srgb, var(--color-navy) 45%, transparent);"
-        >
-          linkedin
-        </a>
+        {socials.map((link, i) => (
+          <>
+            {i > 0 && <span style="color: color-mix(in srgb, var(--color-navy) 20%, transparent);">·</span>}
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener"
+              class="text-sm transition-colors hover:text-[var(--color-coral)]"
+              style="color: color-mix(in srgb, var(--color-navy) 45%, transparent);"
+            >
+              {link.label}
+            </a>
+          </>
+        ))}
       </div>
     </div>
   </div>

@@ -1,7 +1,7 @@
 ---
 import SectionLayout from '../layouts/SectionLayout.astro';
 import SectionHeading from '../components/shared/SectionHeading.astro';
-import { timeline, toolkit, drives } from '../data/about';
+import { timeline, toolkit, drives, nudge } from '../data/about';
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -9,16 +9,16 @@ const base = import.meta.env.BASE_URL;
 <SectionLayout title="About" description="the whole story // engineer, product thinker, forever curious">
   <SectionHeading
     label="about"
-    title="so, who am i??"
-    subtitle="glad you asked!! here's the whole thing"
+    title="so, who am i? (professionally?)"
+    subtitle="so here's the whole thing"
     labelColor="var(--color-coral)"
   />
 
   <!-- Heads-up nudge -->
   <div class="mt-6 mb-2 flex items-center gap-3 rounded-xl px-4 py-3" style="background: color-mix(in srgb, var(--color-peach) 50%, transparent); border: 1px solid color-mix(in srgb, var(--color-peach) 40%, transparent);">
     <span class="text-sm" style="color: color-mix(in srgb, var(--color-navy) 55%, transparent); font-family: var(--font-body);">
-      heads up — this page is mostly the professional side of things. looking for anime, hobbies, and the non-resume stuff??
-      <a href={`${base}personal/`} class="font-medium no-underline" style="color: var(--color-coral);"> check out the personal page →</a>
+      {nudge.text}
+      <a href={`${base}${nudge.linkPath}`} class="font-medium no-underline" style="color: var(--color-coral);"> {nudge.linkText}</a>
     </span>
   </div>
 

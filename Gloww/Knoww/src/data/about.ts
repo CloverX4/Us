@@ -4,6 +4,14 @@
  */
 import type { TimelineEntry, Skill, Drive } from './types';
 
+// ── Page nudge (shown at the top of about page) ──
+
+export const nudge = {
+  text: "looking for vibes and non-resume stuff??",
+  linkText: "check this out!",
+  linkPath: "personal/",
+};
+
 // ── Timeline ──
 
 export const timeline: TimelineEntry[] = [

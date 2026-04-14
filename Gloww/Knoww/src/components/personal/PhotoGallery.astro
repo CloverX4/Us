@@ -1,6 +1,4 @@
 ---
-import type { Photo } from '../../data/types';
-
 interface Props {
   photos: { src: string; caption?: string }[];
 }
@@ -38,7 +36,7 @@ const { photos } = Astro.props;
         ))}
       </div>
 
-      <!-- Row 2: scrolls right (reversed order for variety) -->
+      <!-- Row 2: scrolls right -->
       <div class="ribbon-row ribbon-right flex gap-3" data-direction="right">
         {[...photos.slice().reverse(), ...photos.slice().reverse()].map((photo, i) => {
           const realIndex = photos.length - 1 - (i % photos.length);
@@ -61,38 +59,28 @@ const { photos } = Astro.props;
       </div>
     </div>
 
-    <!-- Lightbox overlay -->
-    <div id="photo-lightbox" class="fixed inset-0 z-[100] hidden" style="background: rgba(26,26,46,0.92); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);">
+    <!-- Lightbox: card deck viewer -->
+    <div id="photo-lightbox" class="fixed inset-0 z-[100] hidden items-center justify-center" style="background: rgba(26,26,46,0.92); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);">
       <!-- Close button -->
-      <button id="lb-close" class="absolute top-5 right-5 z-10 w-10 h-10 flex items-center justify-center rounded-full text-white/60 hover:text-white transition-colors" style="background: rgba(255,255,255,0.1);">
+      <button id="lb-close" class="absolute top-5 right-5 z-50 w-10 h-10 flex items-center justify-center rounded-full text-white/60 hover:text-white transition-colors" style="background: rgba(255,255,255,0.1);">
         ✕
       </button>
 
-      <!-- Main layout -->
-      <div class="h-full flex flex-col items-center justify-center px-4">
-        <!-- Center photo -->
-        <div class="relative flex items-center justify-center" style="max-height: 70vh; max-width: 90vw;">
-          <img id="lb-main" src="" alt="" class="max-h-[70vh] max-w-[90vw] sm:max-w-[70vw] object-contain rounded-xl shadow-2xl transition-opacity duration-300" />
-        </div>
+      <!-- Nav arrows -->
+      <button id="lb-prev" class="absolute left-3 sm:left-6 z-50 w-10 h-10 flex items-center justify-center rounded-full text-white/60 hover:text-white text-xl transition-colors" style="background: rgba(255,255,255,0.08); top: 50%; transform: translateY(-50%);">
+        ‹
+      </button>
+      <button id="lb-next" class="absolute right-3 sm:right-6 z-50 w-10 h-10 flex items-center justify-center rounded-full text-white/60 hover:text-white text-xl transition-colors" style="background: rgba(255,255,255,0.08); top: 50%; transform: translateY(-50%);">
+        ›
+      </button>
 
-        <!-- Caption -->
-        <p id="lb-caption" class="mt-4 text-sm text-white/70 text-center" style="font-family: var(--font-body); min-height: 1.5em;"></p>
-
-        <!-- Deck strip: prev/next photos -->
-        <div class="mt-6 flex items-center gap-2 sm:gap-3">
-          <button id="lb-prev" class="shrink-0 w-8 h-8 flex items-center justify-center rounded-full text-white/50 hover:text-white transition-colors" style="background: rgba(255,255,255,0.08);">
-            ‹
-          </button>
-
-          <div id="lb-deck" class="flex items-center gap-2 overflow-hidden" style="max-width: 70vw;">
-            <!-- Deck thumbnails rendered by JS -->
-          </div>
-
-          <button id="lb-next" class="shrink-0 w-8 h-8 flex items-center justify-center rounded-full text-white/50 hover:text-white transition-colors" style="background: rgba(255,255,255,0.08);">
-            ›
-          </button>
-        </div>
+      <!-- Card deck container -->
+      <div id="lb-deck" class="relative flex items-center justify-center" style="width: 90vw; max-width: 1100px; height: 75vh;">
+        <!-- Cards rendered by JS -->
       </div>
+
+      <!-- Caption -->
+      <p id="lb-caption" class="absolute text-sm text-white/70 text-center" style="font-family: var(--font-body); bottom: 4vh; left: 50%; transform: translateX(-50%); min-height: 1.5em;"></p>
     </div>
   </section>
 )}
@@ -114,23 +102,24 @@ const { photos } = Astro.props;
     display: flex;
   }
 
-  /* Deck thumbnail */
-  .deck-thumb {
-    transition: all 0.3s ease;
-    border-radius: 8px;
+  .deck-card {
+    position: absolute;
+    border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
-    opacity: 0.4;
-    border: 2px solid transparent;
+    transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   }
 
-  .deck-thumb:hover {
-    opacity: 0.7;
+  .deck-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
-  .deck-thumb.active {
-    opacity: 1;
-    border-color: var(--color-coral);
+  .deck-card.center {
+    z-index: 10;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
   }
 </style>
 
@@ -145,7 +134,6 @@ const { photos } = Astro.props;
     const dir = row.getAttribute('data-direction');
     const scrollWidth = row.scrollWidth / 2;
 
-    // Position: start at 0 for left, at -scrollWidth for right
     if (dir === 'right') {
       gsap.set(row, { x: -scrollWidth });
     }
@@ -160,23 +148,21 @@ const { photos } = Astro.props;
     ribbonAnims.push(anim);
   });
 
-  // Pause on hover
   const ribbonWrap = document.querySelector('.ribbon-wrap');
   if (ribbonWrap) {
     ribbonWrap.addEventListener('mouseenter', () => ribbonAnims.forEach(a => a.timeScale(0.2)));
     ribbonWrap.addEventListener('mouseleave', () => ribbonAnims.forEach(a => a.timeScale(1)));
   }
 
-  // ── Lightbox ──
+  // ── Lightbox: Card Deck ──
   const lightbox = document.getElementById('photo-lightbox')!;
-  const lbMain = document.getElementById('lb-main') as HTMLImageElement;
-  const lbCaption = document.getElementById('lb-caption')!;
   const lbDeck = document.getElementById('lb-deck')!;
+  const lbCaption = document.getElementById('lb-caption')!;
   const lbClose = document.getElementById('lb-close')!;
   const lbPrev = document.getElementById('lb-prev')!;
   const lbNext = document.getElementById('lb-next')!;
 
-  // Collect unique photo data from ribbon
+  // Collect unique photos
   const photoEls = document.querySelectorAll('.ribbon-photo');
   const photoMap = new Map<number, { src: string; caption: string }>();
   photoEls.forEach((el) => {
@@ -189,56 +175,127 @@ const { photos } = Astro.props;
 
   const photos = Array.from(photoMap.entries()).sort((a, b) => a[0] - b[0]).map(e => e[1]);
   let currentIdx = 0;
+  const deckCards: HTMLElement[] = [];
+
+  // How many side cards to show on each side
+  function sideCount() {
+    return window.innerWidth >= 640 ? 4 : 2;
+  }
+
+  function buildDeck() {
+    lbDeck.innerHTML = '';
+    deckCards.length = 0;
+
+    const total = sideCount() * 2 + 1;
+    for (let i = 0; i < total; i++) {
+      const card = document.createElement('div');
+      card.className = 'deck-card';
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      card.appendChild(img);
+      lbDeck.appendChild(card);
+      deckCards.push(card);
+
+      card.addEventListener('click', () => {
+        const offset = i - sideCount();
+        if (offset !== 0) {
+          showPhoto(currentIdx + offset);
+        }
+      });
+    }
+  }
+
+  function layoutDeck(animate = true) {
+    const sides = sideCount();
+    const isMobile = window.innerWidth < 640;
+
+    // Center card dimensions
+    const centerW = isMobile ? window.innerWidth * 0.7 : Math.min(480, window.innerWidth * 0.35);
+    const centerH = isMobile ? window.innerHeight * 0.5 : window.innerHeight * 0.55;
+
+    // Side card dimensions (progressively smaller)
+    const sideW = isMobile ? centerW * 0.5 : centerW * 0.55;
+    const sideH = isMobile ? centerH * 0.6 : centerH * 0.65;
+
+    deckCards.forEach((card, i) => {
+      const offset = i - sides; // -4..0..4
+      const idx = ((currentIdx + offset) % photos.length + photos.length) % photos.length;
+      const photo = photos[idx];
+      const img = card.querySelector('img')!;
+
+      img.src = photo.src;
+      img.alt = photo.caption || '';
+
+      const isCenter = offset === 0;
+      const absOffset = Math.abs(offset);
+
+      // Position: center card in middle, sides spread out
+      const spreadX = isMobile ? 45 : 55; // px per step from center
+      const x = offset * spreadX;
+
+      // Y offset: side cards drop down progressively
+      const dropY = absOffset * (isMobile ? 12 : 16);
+
+      // Scale: center = 1, sides get smaller
+      const scale = isCenter ? 1 : Math.max(0.5, 1 - absOffset * 0.1);
+
+      // Opacity: center = 1, sides fade
+      const opacity = isCenter ? 1 : Math.max(0.2, 1 - absOffset * 0.18);
+
+      // Z-index: center highest, sides decrease
+      const z = 10 - absOffset;
+
+      const w = isCenter ? centerW : sideW * scale;
+      const h = isCenter ? centerH : sideH * scale;
+
+      const props: gsap.TweenVars = {
+        width: w,
+        height: h,
+        x: x - w / 2,
+        y: dropY - h / 2 + (isCenter ? 0 : 20),
+        opacity,
+        zIndex: z,
+        duration: animate ? 0.45 : 0,
+        ease: 'power2.out',
+      };
+
+      if (isCenter) {
+        card.classList.add('center');
+      } else {
+        card.classList.remove('center');
+      }
+
+      gsap.to(card, props);
+    });
+
+    // Update caption
+    lbCaption.textContent = photos[currentIdx]?.caption || '';
+  }
 
   function showPhoto(idx: number) {
     currentIdx = ((idx % photos.length) + photos.length) % photos.length;
-    const photo = photos[currentIdx];
-
-    lbMain.style.opacity = '0';
-    setTimeout(() => {
-      lbMain.src = photo.src;
-      lbMain.alt = photo.caption || 'photo';
-      lbMain.style.opacity = '1';
-    }, 150);
-
-    lbCaption.textContent = photo.caption || '';
-    renderDeck();
-  }
-
-  function renderDeck() {
-    lbDeck.innerHTML = '';
-    // Show 4 on each side (9 total) on desktop, fewer on mobile
-    const count = window.innerWidth >= 640 ? 4 : 2;
-
-    for (let offset = -count; offset <= count; offset++) {
-      const idx = ((currentIdx + offset) % photos.length + photos.length) % photos.length;
-      const photo = photos[idx];
-
-      const thumb = document.createElement('div');
-      thumb.className = `deck-thumb ${offset === 0 ? 'active' : ''}`;
-      thumb.style.width = offset === 0 ? '56px' : '44px';
-      thumb.style.height = offset === 0 ? '42px' : '34px';
-      thumb.style.flexShrink = '0';
-
-      const img = document.createElement('img');
-      img.src = photo.src;
-      img.alt = '';
-      img.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
-      img.loading = 'lazy';
-
-      thumb.appendChild(img);
-      thumb.addEventListener('click', () => showPhoto(idx));
-      lbDeck.appendChild(thumb);
-    }
+    layoutDeck(true);
   }
 
   function openLightbox(idx: number) {
     lightbox.classList.add('active');
     document.body.style.overflow = 'hidden';
-    showPhoto(idx);
+    currentIdx = idx;
+
+    buildDeck();
+    layoutDeck(false);
 
     gsap.fromTo(lightbox, { opacity: 0 }, { opacity: 1, duration: 0.3 });
-    gsap.fromTo(lbMain, { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, delay: 0.1 });
+    // Stagger cards in
+    deckCards.forEach((card, i) => {
+      const offset = Math.abs(i - sideCount());
+      gsap.fromTo(card,
+        { y: '+=60', opacity: 0 },
+        { y: card.style.transform ? undefined : 0, opacity: parseFloat(card.style.opacity) || 1, duration: 0.5, delay: offset * 0.04, ease: 'power2.out' }
+      );
+    });
+    // Re-layout after entrance (entrance may have overridden positions)
+    setTimeout(() => layoutDeck(true), 100);
   }
 
   function closeLightbox() {
@@ -252,7 +309,7 @@ const { photos } = Astro.props;
     });
   }
 
-  // Click ribbon photos to open lightbox
+  // Click ribbon photos to open
   photoEls.forEach((el) => {
     el.addEventListener('click', () => {
       const idx = parseInt(el.getAttribute('data-index') || '0');
@@ -264,18 +321,24 @@ const { photos } = Astro.props;
   lbPrev.addEventListener('click', () => showPhoto(currentIdx - 1));
   lbNext.addEventListener('click', () => showPhoto(currentIdx + 1));
 
-  // Click backdrop to close
+  // Click backdrop to close (only the dark area)
   lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox || (e.target as Element).closest('#photo-lightbox > div')?.querySelector('#lb-main') === null) {
-      // Only close if clicking the dark area, not the content
-    }
+    if (e.target === lightbox) closeLightbox();
   });
 
-  // Keyboard navigation
+  // Keyboard
   document.addEventListener('keydown', (e) => {
     if (!lightbox.classList.contains('active')) return;
     if (e.key === 'Escape') closeLightbox();
     if (e.key === 'ArrowLeft') showPhoto(currentIdx - 1);
     if (e.key === 'ArrowRight') showPhoto(currentIdx + 1);
+  });
+
+  // Handle resize
+  window.addEventListener('resize', () => {
+    if (lightbox.classList.contains('active')) {
+      buildDeck();
+      layoutDeck(false);
+    }
   });
 </script>

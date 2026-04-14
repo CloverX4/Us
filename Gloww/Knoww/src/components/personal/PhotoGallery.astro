@@ -74,8 +74,8 @@ const { photos } = Astro.props;
         ›
       </button>
 
-      <!-- Card deck container -->
-      <div id="lb-deck" class="relative flex items-center justify-center" style="width: 90vw; max-width: 1100px; height: 75vh;">
+      <!-- Card deck container — centered, ~60% screen -->
+      <div id="lb-deck" class="relative" style="width: 60vw; max-width: 600px; height: 65vh; max-height: 500px;">
         <!-- Cards rendered by JS -->
       </div>
 
@@ -104,11 +104,12 @@ const { photos } = Astro.props;
 
   .deck-card {
     position: absolute;
+    top: 0;
+    left: 0;
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
-    transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
   }
 
   .deck-card img {
@@ -119,7 +120,8 @@ const { photos } = Astro.props;
 
   .deck-card.center {
     z-index: 10;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.45);
+    cursor: default;
   }
 </style>
 
@@ -177,7 +179,7 @@ const { photos } = Astro.props;
   let currentIdx = 0;
   const deckCards: HTMLElement[] = [];
 
-  // How many side cards to show on each side
+  // How many cards visible beneath on each side
   function sideCount() {
     return window.innerWidth >= 640 ? 4 : 2;
   }
@@ -207,18 +209,18 @@ const { photos } = Astro.props;
 
   function layoutDeck(animate = true) {
     const sides = sideCount();
-    const isMobile = window.innerWidth < 640;
 
-    // Center card dimensions
-    const centerW = isMobile ? window.innerWidth * 0.7 : Math.min(480, window.innerWidth * 0.35);
-    const centerH = isMobile ? window.innerHeight * 0.5 : window.innerHeight * 0.55;
+    // All cards same size — fill the deck container
+    const deckRect = lbDeck.getBoundingClientRect();
+    const cardW = deckRect.width;
+    const cardH = deckRect.height;
 
-    // Side card dimensions (progressively smaller)
-    const sideW = isMobile ? centerW * 0.5 : centerW * 0.55;
-    const sideH = isMobile ? centerH * 0.6 : centerH * 0.65;
+    // Displacement per card: slight peek on left/right edges
+    const peekX = 10;  // px offset per step
+    const peekY = 6;   // px offset per step downward
 
     deckCards.forEach((card, i) => {
-      const offset = i - sides; // -4..0..4
+      const offset = i - sides; // e.g. -4..0..4
       const idx = ((currentIdx + offset) % photos.length + photos.length) % photos.length;
       const photo = photos[idx];
       const img = card.querySelector('img')!;
@@ -229,35 +231,16 @@ const { photos } = Astro.props;
       const isCenter = offset === 0;
       const absOffset = Math.abs(offset);
 
-      // Position: center card in middle, sides spread out
-      const spreadX = isMobile ? 45 : 55; // px per step from center
-      const x = offset * spreadX;
+      // Stack: center card on top, cards behind offset slightly
+      // Left cards peek to the left, right cards peek to the right
+      const x = offset * peekX;
+      const y = absOffset * peekY;
 
-      // Y offset: side cards drop down progressively
-      const dropY = absOffset * (isMobile ? 12 : 16);
-
-      // Scale: center = 1, sides get smaller
-      const scale = isCenter ? 1 : Math.max(0.5, 1 - absOffset * 0.1);
-
-      // Opacity: center = 1, sides fade
-      const opacity = isCenter ? 1 : Math.max(0.2, 1 - absOffset * 0.18);
-
-      // Z-index: center highest, sides decrease
+      // Z-index: center = highest, further = lower
       const z = 10 - absOffset;
 
-      const w = isCenter ? centerW : sideW * scale;
-      const h = isCenter ? centerH : sideH * scale;
-
-      const props: gsap.TweenVars = {
-        width: w,
-        height: h,
-        x: x - w / 2,
-        y: dropY - h / 2 + (isCenter ? 0 : 20),
-        opacity,
-        zIndex: z,
-        duration: animate ? 0.45 : 0,
-        ease: 'power2.out',
-      };
+      // Opacity: center fully visible, behind cards slightly dimmed
+      const opacity = isCenter ? 1 : Math.max(0.35, 1 - absOffset * 0.14);
 
       if (isCenter) {
         card.classList.add('center');
@@ -265,10 +248,18 @@ const { photos } = Astro.props;
         card.classList.remove('center');
       }
 
-      gsap.to(card, props);
+      gsap.to(card, {
+        width: cardW,
+        height: cardH,
+        x: x,
+        y: y,
+        opacity,
+        zIndex: z,
+        duration: animate ? 0.4 : 0,
+        ease: 'power2.out',
+      });
     });
 
-    // Update caption
     lbCaption.textContent = photos[currentIdx]?.caption || '';
   }
 
@@ -286,16 +277,6 @@ const { photos } = Astro.props;
     layoutDeck(false);
 
     gsap.fromTo(lightbox, { opacity: 0 }, { opacity: 1, duration: 0.3 });
-    // Stagger cards in
-    deckCards.forEach((card, i) => {
-      const offset = Math.abs(i - sideCount());
-      gsap.fromTo(card,
-        { y: '+=60', opacity: 0 },
-        { y: card.style.transform ? undefined : 0, opacity: parseFloat(card.style.opacity) || 1, duration: 0.5, delay: offset * 0.04, ease: 'power2.out' }
-      );
-    });
-    // Re-layout after entrance (entrance may have overridden positions)
-    setTimeout(() => layoutDeck(true), 100);
   }
 
   function closeLightbox() {

@@ -68,14 +68,11 @@ const bleedSet = new Set(['til', 'builds', 'personal']);
 <section class="relative h-screen overflow-hidden">
   <!-- Layer 1: Solid particles moving in background -->
   <div id="particle-bg" class="pointer-events-none absolute inset-0 hidden lg:block" style="z-index: 1;"></div>
+  <div id="particle-bg-mobile" class="pointer-events-none absolute inset-0 lg:hidden" style="z-index: 1;"></div>
 
   <!-- Layer 2: Light frosted overlay — softens particles underneath -->
   <div class="pointer-events-none absolute inset-0 hidden lg:block" style="z-index: 2; background: rgba(255,248,240,0.18); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);"></div>
-
-  <div
-    class="absolute inset-0 z-0 lg:hidden"
-    style="background: radial-gradient(ellipse at 30% 40%, color-mix(in srgb, var(--color-coral) 8%, transparent), transparent 60%), radial-gradient(ellipse at 70% 60%, color-mix(in srgb, var(--color-teal) 6%, transparent), transparent 50%);"
-  ></div>
+  <div class="pointer-events-none absolute inset-0 lg:hidden" style="z-index: 2; background: rgba(255,248,240,0.12); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);"></div>
 
   <!-- Desktop: grid left, heading right -->
   <div class="hidden lg:flex w-full h-screen items-center">
@@ -195,7 +192,7 @@ const bleedSet = new Set(['til', 'builds', 'personal']);
   </div>
 
   <!-- Mobile -->
-  <div class="flex flex-col items-center gap-8 lg:hidden px-4 py-16">
+  <div class="relative flex flex-col items-center gap-6 lg:hidden px-4 pt-14 pb-8" style="z-index: 10;">
     <div class="text-center">
       <h1
         class="mb-3 text-4xl font-bold leading-tight tracking-tight"
@@ -213,19 +210,66 @@ const bleedSet = new Set(['til', 'builds', 'personal']);
       </p>
     </div>
 
-    <div class="grid grid-cols-2 gap-3 w-full max-w-sm">
+    <div
+      class="mobile-bento w-full"
+      style="
+        max-width: 400px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        grid-template-areas:
+          'about   til'
+          'about   product'
+          'personal personal'
+          'talk    builds';
+        gap: 10px;
+      "
+    >
       {tiles.map((tile) => (
         <a
           href={tile.href}
-          class="relative flex flex-col items-center justify-center gap-2 overflow-hidden p-5 no-underline transition-transform duration-300 active:scale-95"
-          style={`background: ${tile.color}; border-radius: 6px; min-height: 90px;`}
+          class="mobile-tile relative overflow-hidden no-underline cursor-pointer"
+          style={`grid-area: ${tile.area}; border-radius: 14px; min-height: ${tile.area === 'about' ? '180px' : tile.area === 'personal' ? '100px' : '85px'};`}
+          data-color={tile.color}
         >
-          <span
-            class="text-xs font-bold"
-            style={`font-family: var(--font-display); color: ${tile.color === '#1A1A2E' || tile.color === '#FF6B6B' ? 'white' : 'var(--color-navy)'};`}
+          <img
+            src={tile.img}
+            alt={tile.title}
+            class="mobile-tile-img absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+          />
+
+          <div
+            class="mobile-tile-color absolute inset-0"
+            style={`background: ${tile.color};`}
+          ></div>
+
+          <div class="mobile-tile-label absolute inset-0 flex flex-col items-center justify-center text-center p-3">
+            <span
+              class="text-sm font-bold tracking-wide"
+              style={`font-family: var(--font-display); color: ${tile.color === '#1A1A2E' || tile.color === '#FF6B6B' ? 'white' : 'var(--color-navy)'};`}
+            >
+              {tile.title}
+            </span>
+            <span
+              class="text-[10px] mt-0.5 opacity-60"
+              style={`font-family: var(--font-body); color: ${tile.color === '#1A1A2E' || tile.color === '#FF6B6B' ? 'white' : 'var(--color-navy)'};`}
+            >
+              {tile.peek}
+            </span>
+          </div>
+
+          <div
+            class="mobile-tile-info absolute bottom-0 left-0 right-0 px-3 py-3 translate-y-full"
+            style="background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.4) 70%, transparent);"
           >
-            {tile.title}
-          </span>
+            <p class="text-xs font-bold text-white leading-tight" style="font-family: var(--font-display);">
+              {tile.title}
+            </p>
+            <p class="text-[10px] text-white/70 mt-0.5 leading-snug" style="font-family: var(--font-body);">
+              {tile.peek}
+            </p>
+          </div>
         </a>
       ))}
     </div>
@@ -242,6 +286,27 @@ const bleedSet = new Set(['til', 'builds', 'personal']);
     border-top: 1px solid rgba(255,255,255,0.3);
     pointer-events: none;
     z-index: 5;
+  }
+
+  /* Mobile tile glass edge */
+  .mobile-tile::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 1px 2px rgba(255,255,255,0.4), inset 0 -1px 2px rgba(0,0,0,0.06);
+    border-top: 1px solid rgba(255,255,255,0.25);
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .mobile-tile {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 8px 20px rgba(0,0,0,0.06);
+    transition: transform 0.3s ease;
+  }
+
+  .mobile-tile:active {
+    transform: scale(0.97);
   }
 </style>
 
@@ -414,6 +479,100 @@ const bleedSet = new Set(['til', 'builds', 'personal']);
         gsap.to(label, { opacity: 1, y: 0, duration: 0.25 });
         gsap.to(info, { y: '100%', duration: 0.25, ease: 'power2.in' });
       });
+    });
+  }
+
+  // ── Mobile particles (smaller, fewer, faster) ──
+  if (window.innerWidth < 1024) {
+    const mobileBg = document.getElementById('particle-bg-mobile');
+    if (mobileBg) {
+      const colors = ['#FF6B6B','#FFB347','#4ECDC4','#F7E8D4','#FF8A80','#80CBC4'];
+      const count = 20;
+      for (let i = 0; i < count; i++) {
+        const dot = document.createElement('div');
+        const size = 14 + Math.random() * 35;
+        const cols = 5, rows = 4;
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const x = (col / cols) * 100 + (Math.random() - 0.5) * (100 / cols);
+        const y = (row / rows) * 100 + (Math.random() - 0.5) * (100 / rows);
+        dot.style.cssText = `
+          position: absolute;
+          width: ${size}px; height: ${size}px;
+          left: ${x}%; top: ${y}%;
+          border-radius: 50%;
+          background: ${colors[Math.floor(Math.random() * colors.length)]};
+          opacity: 0; will-change: transform;
+        `;
+        mobileBg.appendChild(dot);
+        gsap.to(dot, { opacity: 0.35 + Math.random() * 0.25, duration: 1, delay: 0.1 + i * 0.05, ease: 'power1.out' });
+        const speed = 1.8 + Math.random() * 1.5;
+        const rx = 25 + Math.random() * 50;
+        const ry = 20 + Math.random() * 40;
+        gsap.to(dot, {
+          x: (i % 2 === 0 ? 1 : -1) * rx,
+          y: (i % 3 === 0 ? 1 : -1) * ry,
+          duration: speed, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: Math.random(),
+        });
+      }
+    }
+  }
+
+  // ── Mobile: tap to reveal image, tap again to navigate ──
+  if (window.innerWidth < 1024) {
+    const mobileTiles = document.querySelectorAll('.mobile-tile');
+    let activeTile: Element | null = null;
+
+    mobileTiles.forEach((tile) => {
+      const colorOverlay = tile.querySelector('.mobile-tile-color') as HTMLElement;
+      const label = tile.querySelector('.mobile-tile-label') as HTMLElement;
+      const info = tile.querySelector('.mobile-tile-info') as HTMLElement;
+
+      tile.addEventListener('click', (e) => {
+        if (activeTile === tile) {
+          // Second tap — navigate (default link behavior)
+          return;
+        }
+
+        e.preventDefault();
+
+        // Close any previously active tile
+        if (activeTile && activeTile !== tile) {
+          const prevColor = activeTile.querySelector('.mobile-tile-color') as HTMLElement;
+          const prevLabel = activeTile.querySelector('.mobile-tile-label') as HTMLElement;
+          const prevInfo = activeTile.querySelector('.mobile-tile-info') as HTMLElement;
+          gsap.to(prevColor, { opacity: 1, duration: 0.3 });
+          gsap.to(prevLabel, { opacity: 1, y: 0, duration: 0.2 });
+          gsap.to(prevInfo, { y: '100%', duration: 0.2 });
+        }
+
+        // Reveal this tile
+        activeTile = tile;
+        gsap.to(colorOverlay, { opacity: 0, duration: 0.5, ease: 'power1.out' });
+        gsap.to(label, { opacity: 0, y: -6, duration: 0.2 });
+        gsap.to(info, { y: 0, duration: 0.35, delay: 0.1, ease: 'power2.out' });
+      });
+    });
+
+    // Tap outside closes active tile
+    document.addEventListener('click', (e) => {
+      if (activeTile && !(e.target as Element).closest('.mobile-tile')) {
+        const prevColor = activeTile.querySelector('.mobile-tile-color') as HTMLElement;
+        const prevLabel = activeTile.querySelector('.mobile-tile-label') as HTMLElement;
+        const prevInfo = activeTile.querySelector('.mobile-tile-info') as HTMLElement;
+        gsap.to(prevColor, { opacity: 1, duration: 0.3 });
+        gsap.to(prevLabel, { opacity: 1, y: 0, duration: 0.2 });
+        gsap.to(prevInfo, { y: '100%', duration: 0.2 });
+        activeTile = null;
+      }
+    });
+
+    // Staggered entrance for mobile tiles
+    mobileTiles.forEach((tile, i) => {
+      gsap.fromTo(tile,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.5, delay: 0.3 + i * 0.08, ease: 'power2.out' }
+      );
     });
   }
 </script>
